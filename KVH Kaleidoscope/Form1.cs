@@ -29,12 +29,12 @@ namespace Kvh.Kaleidoscope
 
         private RenderWindow renderWindow = new RenderWindow();
 
-        private string imgFileName = Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + "\\P4484_710-03456_01.jpg";
+        private string imgFileName;
 
         public Form1()
         {
             InitializeComponent();
-            GeneratePattern();
+            //GeneratePattern();
             renderWindow.Show();
         }
 
@@ -42,7 +42,7 @@ namespace Kvh.Kaleidoscope
         {
             GeneratePattern();
             RenderAll();
-            System.GC.Collect();
+            GC.Collect();
         }
 
         private void RenderAll()
@@ -66,14 +66,25 @@ namespace Kvh.Kaleidoscope
 
         private void LoadImage(string imgPath)
         {
-            var tmp = new Bitmap(imgPath);
-            img = tmp.Clone() as Bitmap;
-            tmp.Dispose();
+            try
+            {
+                var tmp = new Bitmap(imgPath);
+                img = tmp.Clone() as Bitmap;
+                tmp.Dispose();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading image: " + ex.Message, 
+                    "Error Loading Image", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
 
         private void GeneratePattern()
         {
             LoadImage(imgFileName);
+            if (img == null)
+                return;
 
             textBox1.Text = img.Width.ToString();
             textBox2.Text = img.Height.ToString();
@@ -219,7 +230,6 @@ namespace Kvh.Kaleidoscope
             isUpdating = true;
             GeneratePattern();
             previousUpdateLocation = e.Location;
-            Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff"));
             GC.Collect();
             isUpdating = false;
         }
