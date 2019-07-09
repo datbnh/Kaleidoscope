@@ -13,20 +13,9 @@ namespace Kvh.Kaleidoscope
         private readonly int MIN_IMG_SIZE = 100;
         private readonly int MAX_IMG_SIZE = 4096;
 
-        private readonly float MIN_PATTERN_ROTATION = 0;
-        private readonly float MAX_PATTERN_ROTATION = 360f;
-
         private Bitmap img;
-
-        private Bitmap patternOriginal;
-        private Bitmap patternFlippedLR;
-
-        private float rdrSize = 250;
-        private float rdrWidth;
-        private float rdrHeight;
-
-        private float xOffset;
-        private float yOffset;
+        private Bitmap pattern;
+        private float patternWidth = 250;
 
         private int clipPathOffsetX;
         private int clipPathOffsetY;
@@ -45,13 +34,13 @@ namespace Kvh.Kaleidoscope
         public Form1()
         {
             InitializeComponent();
-            refreshSeed();
+            GeneratePattern();
             renderWindow.Show();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            refreshSeed();
+            GeneratePattern();
             RenderAll();
             System.GC.Collect();
         }
@@ -62,101 +51,29 @@ namespace Kvh.Kaleidoscope
             toolStripStatusLabel1.Invalidate();
             toolStripStatusLabel3.Text = renderWindow.PictureBox.Width + "";
             toolStripStatusLabel5.Text = renderWindow.PictureBox.Height + "";
-            toolStripStatusLabel7.Text = rdrSize + "";
+            toolStripStatusLabel7.Text = patternWidth + "";
             Application.DoEvents();
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            //var nTotalRows = (int)Math.Round(renderWindow.PictureBox.Height / yOffset, 0) + 2;
-            //var nTotalCols = (int)Math.Round(renderWindow.PictureBox.Width / xOffset / 3, 0) + 2;
-            //var nTop = (int)Math.Round(nTotalRows / 2f, 0);
-            //var nLeft = (int)Math.Round(nTotalCols / 2f, 0);;
-
-            //var g = renderWindow.PictureBox.CreateGraphics();
-            //g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            //g.SmoothingMode = SmoothingMode.HighQuality;
-            //g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            //g.Clear(Color.Gray);
-
-            //g.TranslateTransform(renderWindow.PictureBox.Width / 2, renderWindow.PictureBox.Height / 2);
-            ////g.RotateTransform(clipPathRotation);
-            //if (nTop > 0)
-            //{
-            //    g.TranslateTransform(0, -nTop * yOffset);
-            //}
-            //for (var i = 0; i < nTotalRows; i++)
-            //{
-            //    if (i % 2 != 0)
-            //    {
-            //        g.TranslateTransform(-1.5f * xOffset, 0);
-            //        DrawRow(g, nLeft, nTotalCols + 1, xOffset, yOffset);
-            //        g.TranslateTransform(1.5f * xOffset, 0);
-            //    }
-            //    else
-            //    {
-            //        DrawRow(g, nLeft, nTotalCols, xOffset, yOffset);
-            //    }
-            //    g.TranslateTransform(0, yOffset);
-            //}
-            //g.Dispose();
-
             renderWindow.PictureBox.Image = Kvh.Kaleidoscope.Kaleidoscope.Render(
-                renderWindow.PictureBox.Width, renderWindow.PictureBox.Height, patternOriginal);
+                renderWindow.PictureBox.Width, renderWindow.PictureBox.Height, pattern);
 
             stopwatch.Stop();
             toolStripStatusLabel1.Text = "Rendered in " + stopwatch.ElapsedMilliseconds + " ms.";
         }
 
-        //private void DrawImageAtPointAndAngle(Graphics g, Bitmap bmp, float x, float y, float degree)
-        //{
-        //    g.TranslateTransform(x, y);
-        //    g.RotateTransform(degree);
-        //    g.DrawImage(bmp, 0, 0);
-        //    g.RotateTransform(-degree);
-        //    g.TranslateTransform(-x, -y);
-        //}
-
-        //private void DrawSet(Graphics g, float xOffset, float yOffset)
-        //{
-        //    DrawImageAtPointAndAngle(g, patternOriginal, 0, 0, 0);
-        //    DrawImageAtPointAndAngle(g, patternFlippedLR, 1 * xOffset, 0, 60);
-        //    DrawImageAtPointAndAngle(g, patternOriginal, 1.5f * xOffset, yOffset, 240);
-        //    DrawImageAtPointAndAngle(g, patternFlippedLR, 2.5f * xOffset, yOffset, 180);
-        //    DrawImageAtPointAndAngle(g, patternOriginal, 3 * xOffset, 0, 120);
-        //    DrawImageAtPointAndAngle(g, patternFlippedLR, 2.5f * xOffset, yOffset, 300);
-        //}
-
-        //private void DrawRow(Graphics g, int nLeft, int nTotalCols, float xOffset, float yOffset)
-        //{
-        //    var setXOffset = xOffset * 3;
-        //    if (nLeft > 0)
-        //    {
-        //        g.TranslateTransform(-nLeft * setXOffset, 0);
-        //    }
-        //    for (var i=0; i<nTotalCols; i++)
-        //    {
-        //        DrawSet(g, xOffset, yOffset);
-        //        g.TranslateTransform(setXOffset, 0);
-        //    }
-        //    g.TranslateTransform(-(nTotalCols - nLeft) * setXOffset, 0);
-        //}
-
-        private int floor(float number)
-        {
-            return (int)Math.Floor(number);
-        }
-
-        private void loadImage(string imgPath)
+        private void LoadImage(string imgPath)
         {
             var tmp = new Bitmap(imgPath);
             img = tmp.Clone() as Bitmap;
             tmp.Dispose();
         }
 
-        private void refreshSeed()
+        private void GeneratePattern()
         {
-            loadImage(imgFileName);
+            LoadImage(imgFileName);
 
             textBox1.Text = img.Width.ToString();
             textBox2.Text = img.Height.ToString();
@@ -166,30 +83,26 @@ namespace Kvh.Kaleidoscope
             pictureBox1.Width = scaledWidth + 2;
             pictureBox1.Height = scaledHeight + 2;
 
-            rdrSize = int.Parse(textBox5.Text);
+            this.patternWidth = int.Parse(textBox5.Text);
             textBox4.Text = scaledHeight + "";
 
             var clipXOffset = int.Parse(textBox6.Text);
             var clipYOffset = int.Parse(textBox7.Text);
             var angle = float.Parse(textBox8.Text);
 
-            rdrWidth = rdrSize;
-            rdrHeight = rdrSize * (float)Math.Sqrt(3) / 2;
-            //pictureBox2.Width = (int)rdrWidth + 2;
-            //pictureBox2.Height = (int)rdrHeight + 2;
-            //var rdrRect = new RectangleF(0, 0, rdrWidth, rdrHeight);
-
             var imgRect = new Rectangle(0, 0, img.Width, img.Height);
             var scaledImgRect = new RectangleF(0, 0, scaledWidth, scaledHeight);
-            
+
+            var patternHeight = patternWidth * (float)Math.Sqrt(3) / 2;
+
             var clippingPath = new GraphicsPath();
             clippingPath.AddPolygon(new[] {
                 new PointF(0, 0),
-                new PointF(rdrWidth, 0),
-                new PointF(rdrWidth/2, rdrHeight)});
+                new PointF(patternWidth, 0),
+                new PointF(patternWidth/2, patternHeight)});
 
-            patternOriginal = new Bitmap(floor(rdrWidth), floor(rdrHeight));
-            var gPattern = Graphics.FromImage(patternOriginal);
+            pattern = new Bitmap((int)(Math.Round(patternWidth, 0)), (int)(Math.Round(patternHeight)));
+            var gPattern = Graphics.FromImage(pattern);
             gPattern.SmoothingMode = SmoothingMode.HighQuality;
             gPattern.InterpolationMode = InterpolationMode.HighQualityBicubic;
             gPattern.Clip = new Region(clippingPath);
@@ -198,30 +111,17 @@ namespace Kvh.Kaleidoscope
             gPattern.DrawImage(img, scaledImgRect, imgRect, GraphicsUnit.Pixel);
             gPattern.Dispose();
 
-            patternFlippedLR = patternOriginal.Clone() as Bitmap;
-            patternFlippedLR.RotateFlip(RotateFlipType.RotateNoneFlipX);
-
-            var overlappingFactor = 0.999f;
-
-            xOffset = rdrWidth * overlappingFactor;// * 0.99f;
-            yOffset = rdrHeight * overlappingFactor;// * 0.99f;
-
             var previewBmp = new Bitmap(scaledWidth, scaledHeight);
             var gPreviewBmp = Graphics.FromImage(previewBmp);
             gPreviewBmp.SmoothingMode = SmoothingMode.HighQuality;
             gPreviewBmp.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            //gPreviewBmp.TranslateTransform(-clipXOffset, -clipYOffset);
             gPreviewBmp.DrawImage(img, scaledImgRect, imgRect, GraphicsUnit.Pixel);
             gPreviewBmp.TranslateTransform(clipXOffset, clipYOffset);
             gPreviewBmp.RotateTransform(angle);
             gPreviewBmp.DrawPath(new Pen(Brushes.Red), clippingPath);
-
-            //gPreviewBmp.RotateTransform(-angle);
-            //gPreviewBmp.TranslateTransform(-clipXOffset, -clipYOffset);
-            //gPreviewBmp.DrawImage(patternOriginal, 0, scaledHeight + 10);
             gPreviewBmp.Dispose();
             pictureBox1.Image = previewBmp;
-            pictureBox2.Image = patternOriginal;
+            pictureBox2.Image = pattern;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -233,7 +133,7 @@ namespace Kvh.Kaleidoscope
         {
             imgFileName = openFileDialog1.FileName;
             toolStripStatusLabel8.Text = openFileDialog1.FileName;
-            refreshSeed();
+            GeneratePattern();
         }
 
         private bool isPictureBoxLMouseDown = false;
@@ -249,7 +149,7 @@ namespace Kvh.Kaleidoscope
 
             if (isPictureBoxLMouseDown && isPictureBoxRMouseDown)
             {
-                previousRdrSize = (int)rdrSize;
+                previousRdrSize = (int)patternWidth;
             }
 
             clickedLocation = e.Location;
@@ -290,13 +190,13 @@ namespace Kvh.Kaleidoscope
 
             if (isPictureBoxLMouseDown && isPictureBoxRMouseDown)
             {
-                rdrSize = previousRdrSize + dX;
-                if (rdrSize > MAX_PATTERN_SIZE)
-                    rdrSize = MAX_PATTERN_SIZE;
-                else if (rdrSize < MIN_PATTERN_SIZE)
-                    rdrSize = MIN_PATTERN_SIZE;
+                patternWidth = previousRdrSize + dX;
+                if (patternWidth > MAX_PATTERN_SIZE)
+                    patternWidth = MAX_PATTERN_SIZE;
+                else if (patternWidth < MIN_PATTERN_SIZE)
+                    patternWidth = MIN_PATTERN_SIZE;
 
-                textBox5.Text = rdrSize.ToString();
+                textBox5.Text = patternWidth.ToString();
             }
             else if (isPictureBoxLMouseDown)
             {
@@ -317,7 +217,7 @@ namespace Kvh.Kaleidoscope
             }
 
             isUpdating = true;
-            refreshSeed();
+            GeneratePattern();
             previousUpdateLocation = e.Location;
             Console.WriteLine(DateTime.Now.ToString("HH:mm:ss.fff"));
             GC.Collect();
