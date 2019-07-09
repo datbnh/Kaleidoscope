@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace KaDoscope_Beta0
+namespace Kvh.Kaleidoscope
 {
     public partial class RenderWindow : Form
     {

@@ -4,7 +4,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
 
-namespace KaDoscope_Beta0
+namespace Kvh.Kaleidoscope
 {
     public partial class Form1 : Form
     {
@@ -65,79 +65,82 @@ namespace KaDoscope_Beta0
             toolStripStatusLabel7.Text = rdrSize + "";
             Application.DoEvents();
 
-            var nTotalRows = (int)Math.Round(renderWindow.PictureBox.Height / yOffset, 0) + 2;
-            var nTotalCols = (int)Math.Round(renderWindow.PictureBox.Width / xOffset / 3, 0) + 2;
-            var nTop = (int)Math.Round(nTotalRows / 2f, 0);
-            var nLeft = (int)Math.Round(nTotalCols / 2f, 0);;
-
-            var g = renderWindow.PictureBox.CreateGraphics();
-            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            g.SmoothingMode = SmoothingMode.HighQuality;
-            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            g.Clear(Color.Gray);
-
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            g.TranslateTransform(renderWindow.PictureBox.Width / 2, renderWindow.PictureBox.Height / 2);
-            //g.RotateTransform(clipPathRotation);
-            if (nTop > 0)
-            {
-                g.TranslateTransform(0, -nTop * yOffset);
-            }
-            for (var i = 0; i < nTotalRows; i++)
-            {
-                if (i % 2 != 0)
-                {
-                    g.TranslateTransform(-1.5f * xOffset, 0);
-                    DrawRow(g, nLeft, nTotalCols + 1, xOffset, yOffset);
-                    g.TranslateTransform(1.5f * xOffset, 0);
-                }
-                else
-                {
-                    DrawRow(g, nLeft, nTotalCols, xOffset, yOffset);
-                }
-                g.TranslateTransform(0, yOffset);
-            }
-            g.Dispose();
+            //var nTotalRows = (int)Math.Round(renderWindow.PictureBox.Height / yOffset, 0) + 2;
+            //var nTotalCols = (int)Math.Round(renderWindow.PictureBox.Width / xOffset / 3, 0) + 2;
+            //var nTop = (int)Math.Round(nTotalRows / 2f, 0);
+            //var nLeft = (int)Math.Round(nTotalCols / 2f, 0);;
+
+            //var g = renderWindow.PictureBox.CreateGraphics();
+            //g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            //g.SmoothingMode = SmoothingMode.HighQuality;
+            //g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            //g.Clear(Color.Gray);
+
+            //g.TranslateTransform(renderWindow.PictureBox.Width / 2, renderWindow.PictureBox.Height / 2);
+            ////g.RotateTransform(clipPathRotation);
+            //if (nTop > 0)
+            //{
+            //    g.TranslateTransform(0, -nTop * yOffset);
+            //}
+            //for (var i = 0; i < nTotalRows; i++)
+            //{
+            //    if (i % 2 != 0)
+            //    {
+            //        g.TranslateTransform(-1.5f * xOffset, 0);
+            //        DrawRow(g, nLeft, nTotalCols + 1, xOffset, yOffset);
+            //        g.TranslateTransform(1.5f * xOffset, 0);
+            //    }
+            //    else
+            //    {
+            //        DrawRow(g, nLeft, nTotalCols, xOffset, yOffset);
+            //    }
+            //    g.TranslateTransform(0, yOffset);
+            //}
+            //g.Dispose();
+
+            renderWindow.PictureBox.Image = Kvh.Kaleidoscope.Kaleidoscope.Render(
+                renderWindow.PictureBox.Width, renderWindow.PictureBox.Height, patternOriginal);
 
             stopwatch.Stop();
             toolStripStatusLabel1.Text = "Rendered in " + stopwatch.ElapsedMilliseconds + " ms.";
         }
 
-        private void DrawImageAtPointAndAngle(Graphics g, Bitmap bmp, float x, float y, float degree)
-        {
-            g.TranslateTransform(x, y);
-            g.RotateTransform(degree);
-            g.DrawImage(bmp, 0, 0);
-            g.RotateTransform(-degree);
-            g.TranslateTransform(-x, -y);
-        }
+        //private void DrawImageAtPointAndAngle(Graphics g, Bitmap bmp, float x, float y, float degree)
+        //{
+        //    g.TranslateTransform(x, y);
+        //    g.RotateTransform(degree);
+        //    g.DrawImage(bmp, 0, 0);
+        //    g.RotateTransform(-degree);
+        //    g.TranslateTransform(-x, -y);
+        //}
 
-        private void DrawSet(Graphics g, float xOffset, float yOffset)
-        {
-            DrawImageAtPointAndAngle(g, patternOriginal, 0, 0, 0);
-            DrawImageAtPointAndAngle(g, patternFlippedLR, 1 * xOffset, 0, 60);
-            DrawImageAtPointAndAngle(g, patternOriginal, 1.5f * xOffset, yOffset, 240);
-            DrawImageAtPointAndAngle(g, patternFlippedLR, 2.5f * xOffset, yOffset, 180);
-            DrawImageAtPointAndAngle(g, patternOriginal, 3 * xOffset, 0, 120);
-            DrawImageAtPointAndAngle(g, patternFlippedLR, 2.5f * xOffset, yOffset, 300);
-        }
+        //private void DrawSet(Graphics g, float xOffset, float yOffset)
+        //{
+        //    DrawImageAtPointAndAngle(g, patternOriginal, 0, 0, 0);
+        //    DrawImageAtPointAndAngle(g, patternFlippedLR, 1 * xOffset, 0, 60);
+        //    DrawImageAtPointAndAngle(g, patternOriginal, 1.5f * xOffset, yOffset, 240);
+        //    DrawImageAtPointAndAngle(g, patternFlippedLR, 2.5f * xOffset, yOffset, 180);
+        //    DrawImageAtPointAndAngle(g, patternOriginal, 3 * xOffset, 0, 120);
+        //    DrawImageAtPointAndAngle(g, patternFlippedLR, 2.5f * xOffset, yOffset, 300);
+        //}
 
-        private void DrawRow(Graphics g, int nLeft, int nTotalCols, float xOffset, float yOffset)
-        {
-            var setXOffset = xOffset * 3;
-            if (nLeft > 0)
-            {
-                g.TranslateTransform(-nLeft * setXOffset, 0);
-            }
-            for (var i=0; i<nTotalCols; i++)
-            {
-                DrawSet(g, xOffset, yOffset);
-                g.TranslateTransform(setXOffset, 0);
-            }
-            g.TranslateTransform(-(nTotalCols - nLeft) * setXOffset, 0);
-        }
+        //private void DrawRow(Graphics g, int nLeft, int nTotalCols, float xOffset, float yOffset)
+        //{
+        //    var setXOffset = xOffset * 3;
+        //    if (nLeft > 0)
+        //    {
+        //        g.TranslateTransform(-nLeft * setXOffset, 0);
+        //    }
+        //    for (var i=0; i<nTotalCols; i++)
+        //    {
+        //        DrawSet(g, xOffset, yOffset);
+        //        g.TranslateTransform(setXOffset, 0);
+        //    }
+        //    g.TranslateTransform(-(nTotalCols - nLeft) * setXOffset, 0);
+        //}
 
         private int floor(float number)
         {

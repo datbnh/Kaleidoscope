@@ -1,4 +1,4 @@
-﻿namespace KaDoscope_Beta0
+﻿namespace Kvh.Kaleidoscope
 {
     partial class RenderWindow
     {
