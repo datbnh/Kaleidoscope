@@ -19,12 +19,11 @@ namespace Kvh.Kaleidoscope
 
             Bitmap[] patterns = { pattern, flippedXPattern };
 
-            float patternWidth = pattern.Width;
+            float patternWidth = pattern.Width * 1f;
             float patternHeight = patternWidth * (float)Math.Sqrt(3) / 2;
 
-
-            var nTotalRows = (int)Math.Round(height / patternHeight, 0) + 2;
             var nTotalCols = (int)Math.Round(width / patternWidth / 3, 0) + 2;
+            var nTotalRows = (int)Math.Round(height / patternHeight, 0) + 2;
             var nTop = (int)Math.Round(nTotalRows / 2f, 0);
             var nLeft = (int)Math.Round(nTotalCols / 2f, 0); ;
 
@@ -34,8 +33,8 @@ namespace Kvh.Kaleidoscope
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
             g.Clear(Color.Gray);
 
-            g.TranslateTransform(width / 2, height / 2);
-            //g.RotateTransform(clipPathRotation);
+            g.TranslateTransform(width / 2, height / 2); // move to image centre
+
             if (nTop > 0)
             {
                 g.TranslateTransform(0, -nTop * patternHeight);
@@ -45,18 +44,16 @@ namespace Kvh.Kaleidoscope
                 if (i % 2 != 0)
                 {
                     g.TranslateTransform(-Kaleidoscope2D.RowXOffsetFactor * patternWidth, 0);
-                    //DrawRow(g, nLeft, nTotalCols + 1, xOffset, yOffset);
                     DrawRow(g, patterns, nLeft, nTotalCols + 1, patternWidth, patternHeight,
-                        Kaleidoscope2D.XOffsetFactor, Kaleidoscope2D.YOffsetFactor,
-                        Kaleidoscope2D.RotationAngle, Kaleidoscope2D.PatternIndex);
+                        Kaleidoscope2D.XOffsetFactors, Kaleidoscope2D.YOffsetFactors,
+                        Kaleidoscope2D.RotationAngles, Kaleidoscope2D.PatternIndices);
                     g.TranslateTransform(Kaleidoscope2D.RowXOffsetFactor * patternWidth, 0);
                 }
                 else
                 {
-                    //DrawRow(g, nLeft, nTotalCols, xOffset, yOffset);
                     DrawRow(g, patterns, nLeft, nTotalCols, patternWidth, patternHeight,
-                        Kaleidoscope2D.XOffsetFactor, Kaleidoscope2D.YOffsetFactor,
-                        Kaleidoscope2D.RotationAngle, Kaleidoscope2D.PatternIndex);
+                        Kaleidoscope2D.XOffsetFactors, Kaleidoscope2D.YOffsetFactors,
+                        Kaleidoscope2D.RotationAngles, Kaleidoscope2D.PatternIndices);
                 }
                 g.TranslateTransform(0, patternHeight);
             }
@@ -76,7 +73,6 @@ namespace Kvh.Kaleidoscope
             }
             for (var i = 0; i < nTotalCols; i++)
             {
-                //DrawSet(g, xOffset, yOffset);
                 DrawSet(g, patterns, patternWidth, patternHeight,
                     xOffsetFactors, yOffsetFactors, rotationAngles, patternIndices);
                 g.TranslateTransform(setWidth, 0);
@@ -98,13 +94,6 @@ namespace Kvh.Kaleidoscope
                 DrawImageAtPointAndAngle(g, patterns[patternIndices[i]],
                     patternWidth * xOffsetFactors[i], patternHeight * yOffsetFactors[i], rotationAngles[i]);
             }
-
-            //DrawImageAtPointAndAngle(g, patternOriginal, 0, 0, 0);
-            //DrawImageAtPointAndAngle(g, patternFlippedLR, 1 * xOffset, 0, 60);
-            //DrawImageAtPointAndAngle(g, patternOriginal, 1.5f * xOffset, yOffset, 240);
-            //DrawImageAtPointAndAngle(g, patternFlippedLR, 2.5f * xOffset, yOffset, 180);
-            //DrawImageAtPointAndAngle(g, patternOriginal, 3 * xOffset, 0, 120);
-            //DrawImageAtPointAndAngle(g, patternFlippedLR, 2.5f * xOffset, yOffset, 300);
         }
 
         private static void DrawImageAtPointAndAngle(Graphics g, Bitmap bmp, float x, float y, float degree)
@@ -120,10 +109,10 @@ namespace Kvh.Kaleidoscope
     // TODO Abstract/Factory class: KaleidoscopeType
     public static class Kaleidoscope2D
     {
-        public static float[] XOffsetFactor = { 0.0f, 1.0f, 1.5f, 2.5f, 3.0f, 2.5f };
-        public static float[] YOffsetFactor = { 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f };
-        public static float[] RotationAngle = { 0, 60, 240, 180, 120, 300 };
-        public static int[] PatternIndex = { 0, 1, 0, 1, 0, 1 };
+        public static float[] XOffsetFactors = { 0.0f, 1.0f, 1.5f, 2.5f, 3.0f, 2.5f };
+        public static float[] YOffsetFactors = { 0.0f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f };
+        public static float[] RotationAngles = { 0, 60, 240, 180, 120, 300 };
+        public static int[] PatternIndices = { 0, 1, 0, 1, 0, 1 };
         public static float SetWidthFactor = 3;
         public static float RowXOffsetFactor = 1.5f;
     }
