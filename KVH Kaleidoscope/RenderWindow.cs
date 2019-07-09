@@ -10,11 +10,14 @@ using System.Windows.Forms;
 
 namespace KaDoscope_Beta0
 {
-    public partial class Form1 : Form
+    public partial class RenderWindow : Form
     {
-        public Form1()
+        public RenderWindow()
         {
             InitializeComponent();
         }
+
+        public Image I { get => pictureBox1.Image; set => pictureBox1.Image = value; }
+        public PictureBox PictureBox { get => pictureBox1; }
     }
 }

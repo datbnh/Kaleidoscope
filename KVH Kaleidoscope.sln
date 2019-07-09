@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.136
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KaDoscope_Beta0", "KaDoscope_Beta0\KaDoscope_Beta0.csproj", "{33768484-8B65-4B79-B072-E1AD755E96AE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KVH Kaleidoscope", "KVH Kaleidoscope\KVH Kaleidoscope.csproj", "{33768484-8B65-4B79-B072-E1AD755E96AE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
