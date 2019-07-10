@@ -119,7 +119,7 @@ namespace Kvh.Kaleidoscope
             stopwatch.Stop();
             toolStripStatusLabel1.Text = "Rendered in " + stopwatch.ElapsedMilliseconds + " ms.";
 
-            Opacity = 0.5;
+            Opacity = 0.25;
         }
 
         private void LoadImage(string imgPath)
