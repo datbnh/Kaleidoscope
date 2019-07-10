@@ -13,13 +13,16 @@ namespace Kvh.Kaleidoscope
     {
         public static Bitmap Render(int width, int height, Bitmap pattern)
         {
+            if (pattern == null)
+                return null;
+
             Bitmap bitmap = new Bitmap(width, height);
             var flippedXPattern = pattern.Clone() as Bitmap;
             flippedXPattern.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
             Bitmap[] patterns = { pattern, flippedXPattern };
 
-            float patternWidth = pattern.Width * 1f;
+            float patternWidth = pattern.Width;
             float patternHeight = patternWidth * (float)Math.Sqrt(3) / 2;
 
             var nTotalCols = (int)Math.Round(width / patternWidth / 3, 0) + 2;
@@ -31,7 +34,7 @@ namespace Kvh.Kaleidoscope
             g.InterpolationMode = InterpolationMode.HighQualityBicubic;
             g.SmoothingMode = SmoothingMode.HighQuality;
             g.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            g.Clear(Color.Gray);
+            g.Clear(Color.Transparent);
 
             g.TranslateTransform(width / 2, height / 2); // move to image centre
 
@@ -92,7 +95,7 @@ namespace Kvh.Kaleidoscope
             for (var i = 0; i < xOffsetFactors.Length; i++)
             {
                 DrawImageAtPointAndAngle(g, patterns[patternIndices[i]],
-                    patternWidth * xOffsetFactors[i] - 0f, patternHeight * yOffsetFactors[i], rotationAngles[i]);
+                    patternWidth * xOffsetFactors[i], patternHeight * yOffsetFactors[i], rotationAngles[i]);
             }
         }
 

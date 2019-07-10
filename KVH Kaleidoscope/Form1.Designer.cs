@@ -71,6 +71,8 @@
             this.toolStrip3 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
@@ -212,7 +214,7 @@
             // toolStrip1
             // 
             this.toolStrip1.CanOverflow = false;
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel10,
             this.toolStripLabel1,
@@ -256,7 +258,7 @@
             // 
             // toolStrip2
             // 
-            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel5,
             this.toolStripTextBox3,
@@ -284,7 +286,7 @@
             this.toolStripTextBox3.Name = "toolStripTextBox3";
             this.toolStripTextBox3.Size = new System.Drawing.Size(40, 25);
             this.toolStripTextBox3.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox3_Validating);
-            this.toolStripTextBox3.TextChanged += new System.EventHandler(this.toolStripTextBox3_TextChanged);
+            this.toolStripTextBox3.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripLabel6
             // 
@@ -298,7 +300,7 @@
             this.toolStripTextBox4.Name = "toolStripTextBox4";
             this.toolStripTextBox4.Size = new System.Drawing.Size(40, 25);
             this.toolStripTextBox4.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox4_Validating);
-            this.toolStripTextBox4.TextChanged += new System.EventHandler(this.toolStripTextBox3_TextChanged);
+            this.toolStripTextBox4.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator2
             // 
@@ -320,7 +322,7 @@
             // 
             // toolStrip4
             // 
-            this.toolStrip4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel3,
             this.toolStripLabel4,
@@ -335,7 +337,9 @@
             this.toolStripLabel9,
             this.toolStripTextBox6,
             this.toolStripSeparator6,
-            this.toolStripButton4});
+            this.toolStripButton4,
+            this.toolStripSeparator7,
+            this.toolStripButton1});
             this.toolStrip4.Location = new System.Drawing.Point(0, 50);
             this.toolStrip4.Name = "toolStrip4";
             this.toolStrip4.Size = new System.Drawing.Size(784, 25);
@@ -361,7 +365,7 @@
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(30, 25);
             this.toolStripTextBox1.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox1_Validating);
-            this.toolStripTextBox1.TextChanged += new System.EventHandler(this.toolStripTextBox3_TextChanged);
+            this.toolStripTextBox1.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator3
             // 
@@ -381,7 +385,7 @@
             this.toolStripTextBox2.Name = "toolStripTextBox2";
             this.toolStripTextBox2.Size = new System.Drawing.Size(30, 25);
             this.toolStripTextBox2.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox2_Validating);
-            this.toolStripTextBox2.TextChanged += new System.EventHandler(this.toolStripTextBox3_TextChanged);
+            this.toolStripTextBox2.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator4
             // 
@@ -401,7 +405,7 @@
             this.toolStripTextBox5.Name = "toolStripTextBox5";
             this.toolStripTextBox5.Size = new System.Drawing.Size(30, 25);
             this.toolStripTextBox5.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox5_Validating);
-            this.toolStripTextBox5.TextChanged += new System.EventHandler(this.toolStripTextBox3_TextChanged);
+            this.toolStripTextBox5.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator5
             // 
@@ -421,7 +425,7 @@
             this.toolStripTextBox6.Name = "toolStripTextBox6";
             this.toolStripTextBox6.Size = new System.Drawing.Size(30, 25);
             this.toolStripTextBox6.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox6_Validating);
-            this.toolStripTextBox6.TextChanged += new System.EventHandler(this.toolStripTextBox3_TextChanged);
+            this.toolStripTextBox6.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator6
             // 
@@ -440,7 +444,7 @@
             // 
             // toolStrip3
             // 
-            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripButton2});
             this.toolStrip3.Location = new System.Drawing.Point(0, 75);
@@ -469,6 +473,21 @@
             // 
             this.errorProvider1.ContainerControl = this;
             // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(172, 22);
+            this.toolStripButton1.Text = "Show Preview Pattern Window";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -479,8 +498,11 @@
             this.Controls.Add(this.toolStripContainer1);
             this.DoubleBuffered = true;
             this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.KeyPreview = true;
             this.Name = "Form1";
+            this.Opacity = 0.5D;
             this.Text = "KVH :: Kaleidoscope";
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
@@ -548,6 +570,8 @@
         private System.Windows.Forms.ErrorProvider errorProvider1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripButton toolStripButton1;
     }
 }
 
