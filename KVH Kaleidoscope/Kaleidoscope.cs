@@ -92,7 +92,7 @@ namespace Kvh.Kaleidoscope
             for (var i = 0; i < xOffsetFactors.Length; i++)
             {
                 DrawImageAtPointAndAngle(g, patterns[patternIndices[i]],
-                    patternWidth * xOffsetFactors[i], patternHeight * yOffsetFactors[i], rotationAngles[i]);
+                    patternWidth * xOffsetFactors[i] - 0f, patternHeight * yOffsetFactors[i], rotationAngles[i]);
             }
         }
 
