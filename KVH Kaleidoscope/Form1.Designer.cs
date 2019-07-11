@@ -68,11 +68,13 @@
             this.toolStripTextBox6 = new System.Windows.Forms.ToolStripTextBox();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip3 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
@@ -89,7 +91,6 @@
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
             this.openFileDialog1.FileOk += new System.ComponentModel.CancelEventHandler(this.openFileDialog1_FileOk);
             // 
             // statusStrip1
@@ -145,8 +146,8 @@
             // 
             this.toolStripStatusLabel1.BorderSides = System.Windows.Forms.ToolStripStatusLabelBorderSides.Left;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(122, 19);
-            this.toolStripStatusLabel1.Text = "toolStripStatusLabel1";
+            this.toolStripStatusLabel1.Size = new System.Drawing.Size(213, 19);
+            this.toolStripStatusLabel1.Text = "Hi there, please load an image to start!";
             // 
             // pictureBox1
             // 
@@ -214,17 +215,15 @@
             // toolStrip1
             // 
             this.toolStrip1.CanOverflow = false;
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel10,
             this.toolStripLabel1,
             this.toolStripSeparator1,
             this.toolStripLabel2});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Location = new System.Drawing.Point(3, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(784, 25);
-            this.toolStrip1.Stretch = true;
+            this.toolStrip1.Size = new System.Drawing.Size(254, 25);
             this.toolStrip1.TabIndex = 0;
             // 
             // toolStripLabel10
@@ -258,7 +257,6 @@
             // 
             // toolStrip2
             // 
-            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel5,
             this.toolStripTextBox3,
@@ -266,11 +264,10 @@
             this.toolStripTextBox4,
             this.toolStripSeparator2,
             this.toolStripButton3});
-            this.toolStrip2.Location = new System.Drawing.Point(0, 25);
+            this.toolStrip2.Location = new System.Drawing.Point(3, 25);
             this.toolStrip2.Name = "toolStrip2";
             this.toolStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip2.Size = new System.Drawing.Size(784, 25);
-            this.toolStrip2.Stretch = true;
+            this.toolStrip2.Size = new System.Drawing.Size(301, 25);
             this.toolStrip2.TabIndex = 1;
             // 
             // toolStripLabel5
@@ -286,7 +283,6 @@
             this.toolStripTextBox3.Name = "toolStripTextBox3";
             this.toolStripTextBox3.Size = new System.Drawing.Size(40, 25);
             this.toolStripTextBox3.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox3_Validating);
-            this.toolStripTextBox3.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripLabel6
             // 
@@ -300,7 +296,6 @@
             this.toolStripTextBox4.Name = "toolStripTextBox4";
             this.toolStripTextBox4.Size = new System.Drawing.Size(40, 25);
             this.toolStripTextBox4.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox4_Validating);
-            this.toolStripTextBox4.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator2
             // 
@@ -322,7 +317,6 @@
             // 
             // toolStrip4
             // 
-            this.toolStrip4.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip4.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel3,
             this.toolStripLabel4,
@@ -336,14 +330,13 @@
             this.toolStripSeparator5,
             this.toolStripLabel9,
             this.toolStripTextBox6,
-            this.toolStripSeparator6,
-            this.toolStripButton4,
             this.toolStripSeparator7,
-            this.toolStripButton1});
-            this.toolStrip4.Location = new System.Drawing.Point(0, 50);
+            this.toolStripButton1,
+            this.toolStripSeparator6,
+            this.toolStripButton4});
+            this.toolStrip4.Location = new System.Drawing.Point(3, 50);
             this.toolStrip4.Name = "toolStrip4";
-            this.toolStrip4.Size = new System.Drawing.Size(784, 25);
-            this.toolStrip4.Stretch = true;
+            this.toolStrip4.Size = new System.Drawing.Size(630, 25);
             this.toolStrip4.TabIndex = 3;
             // 
             // toolStripLabel3
@@ -365,7 +358,6 @@
             this.toolStripTextBox1.Name = "toolStripTextBox1";
             this.toolStripTextBox1.Size = new System.Drawing.Size(30, 25);
             this.toolStripTextBox1.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox1_Validating);
-            this.toolStripTextBox1.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator3
             // 
@@ -385,7 +377,6 @@
             this.toolStripTextBox2.Name = "toolStripTextBox2";
             this.toolStripTextBox2.Size = new System.Drawing.Size(30, 25);
             this.toolStripTextBox2.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox2_Validating);
-            this.toolStripTextBox2.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator4
             // 
@@ -405,7 +396,6 @@
             this.toolStripTextBox5.Name = "toolStripTextBox5";
             this.toolStripTextBox5.Size = new System.Drawing.Size(30, 25);
             this.toolStripTextBox5.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox5_Validating);
-            this.toolStripTextBox5.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator5
             // 
@@ -425,7 +415,6 @@
             this.toolStripTextBox6.Name = "toolStripTextBox6";
             this.toolStripTextBox6.Size = new System.Drawing.Size(30, 25);
             this.toolStripTextBox6.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox6_Validating);
-            this.toolStripTextBox6.TextChanged += new System.EventHandler(this.toolStripTextBox_TextChanged);
             // 
             // toolStripSeparator6
             // 
@@ -442,16 +431,30 @@
             this.toolStripButton4.Text = "Random";
             this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(93, 22);
+            this.toolStripButton1.Text = "Preview Pattern";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click_1);
+            // 
             // toolStrip3
             // 
-            this.toolStrip3.Dock = System.Windows.Forms.DockStyle.None;
             this.toolStrip3.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButton2});
-            this.toolStrip3.Location = new System.Drawing.Point(0, 75);
+            this.toolStripButton2,
+            this.toolStripButton5});
+            this.toolStrip3.Location = new System.Drawing.Point(3, 75);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip3.Size = new System.Drawing.Size(784, 27);
-            this.toolStrip3.Stretch = true;
+            this.toolStrip3.Size = new System.Drawing.Size(240, 27);
             this.toolStrip3.TabIndex = 2;
             this.toolStrip3.Text = "Test";
             // 
@@ -469,24 +472,19 @@
             this.toolStripButton2.Text = "Render";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
+            // toolStripButton5
+            // 
+            this.toolStripButton5.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton5.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton5.Image")));
+            this.toolStripButton5.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton5.Name = "toolStripButton5";
+            this.toolStripButton5.Size = new System.Drawing.Size(168, 24);
+            this.toolStripButton5.Text = "Save Rendered Image to File...";
+            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
+            // 
             // errorProvider1
             // 
             this.errorProvider1.ContainerControl = this;
-            // 
-            // toolStripSeparator7
-            // 
-            this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
-            // 
-            // toolStripButton1
-            // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(172, 22);
-            this.toolStripButton1.Text = "Show Preview Pattern Window";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click_1);
             // 
             // Form1
             // 
@@ -501,6 +499,7 @@
             this.KeyPreview = true;
             this.Name = "Form1";
             this.Opacity = 0.5D;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "KVH :: Kaleidoscope";
             this.Shown += new System.EventHandler(this.Form1_Shown);
             this.statusStrip1.ResumeLayout(false);
@@ -572,6 +571,8 @@
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton toolStripButton5;
+        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
     }
 }
 
