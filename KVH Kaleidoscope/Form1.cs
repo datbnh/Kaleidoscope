@@ -16,11 +16,7 @@ namespace Kvh.Kaleidoscope
         private readonly int MIN_IMG_SIZE = 100;
         private readonly int MAX_IMG_SIZE = 4096;
 
-        private bool IsARLocked
-        {
-            get => toolStripButton3.Checked;
-            set => toolStripButton3.Checked = value;
-        }
+        private bool IsARLocked { get => toolStripButton3.Checked; set => toolStripButton3.Checked = value; }
         public int ImageScaledWidth
         {
             get => imageScaledWidth;
@@ -59,12 +55,11 @@ namespace Kvh.Kaleidoscope
         private int patternYOffset;
         private float patternRotation;
 
-
         private Bitmap img;
         private Bitmap pattern;
 
         private Point clickedLocation;
-        private int previousRdrSize = 250;
+        private int previousPatternSize = 250;
         private int previousClipPathOffsetX;
         private int previousClipPathOffsetY;
         private float previousClipPathRotation;
@@ -72,7 +67,7 @@ namespace Kvh.Kaleidoscope
         private RenderWindow renderWindow = new RenderWindow();
         private RenderWindow previewWindow = new RenderWindow()
         {
-            Text = "Preview",
+            Text = "Preview - KVH",
             ControlBox = true,
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
@@ -87,10 +82,6 @@ namespace Kvh.Kaleidoscope
             Application.AddMessageFilter(gmh);
 
             previewWindow.PictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
-
-            renderWindow.Show();
-            renderWindow.WindowState = FormWindowState.Maximized;
-            //previewWindow.Show();
 
             InitializeComponent();
 
@@ -107,7 +98,6 @@ namespace Kvh.Kaleidoscope
             saveFileDialog1.FilterIndex = 1;
             openFileDialog1.Filter = filter + filterOpen;
             openFileDialog1.FilterIndex = 7;
-
         }
 
         private Point lastCursorPosition;
@@ -133,8 +123,7 @@ namespace Kvh.Kaleidoscope
 
         private void Render()
         {
-            toolStripStatusLabel1.Text = "Rendering...";
-            toolStripStatusLabel1.Invalidate();
+            SetStatus("Rendering...");
             toolStripStatusLabel3.Text = renderWindow.PictureBox.Width + "";
             toolStripStatusLabel5.Text = renderWindow.PictureBox.Height + "";
 
@@ -147,10 +136,17 @@ namespace Kvh.Kaleidoscope
                 renderWindow.PictureBox.Width, renderWindow.PictureBox.Height, pattern);
 
             stopwatch.Stop();
-            toolStripStatusLabel1.Text = "Rendered in " + stopwatch.ElapsedMilliseconds + " ms.";
+            SetStatus("Rendered in " + stopwatch.ElapsedMilliseconds + " ms.");
 
             Opacity = 0.25;
             previewWindow.Opacity = 0.25;
+        }
+
+        private void SetStatus(string statusText)
+        {
+            toolStripStatusLabel1.Text = statusText;
+            toolStripStatusLabel1.IsLink = false;
+            toolStripStatusLabel1.Invalidate();
         }
 
         private void LoadImage(string imgPath)
@@ -226,11 +222,6 @@ namespace Kvh.Kaleidoscope
             ActivatePreviewWindowAtBottomRight();
         }
 
-        private void button2_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.ShowDialog();
-        }
-
         private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
             imgFileName = openFileDialog1.FileName;
@@ -238,30 +229,35 @@ namespace Kvh.Kaleidoscope
 
             var MAX_LEN = 32;
             var fileFullPath = openFileDialog1.FileName;
-            if (fileFullPath.Length > MAX_LEN)
-            {
-                if (openFileDialog1.SafeFileName.Length > MAX_LEN)
-                    toolStripLabel1.Text = "..." + openFileDialog1.SafeFileName.Substring(openFileDialog1.SafeFileName.Length - MAX_LEN);
-                else
-                {
-                    var len = MAX_LEN - openFileDialog1.SafeFileName.Length;
-                    toolStripLabel1.Text = fileFullPath.Substring(0, len) + "...\\" + openFileDialog1.SafeFileName;
-                }
-            }
-            else
-            {
-                toolStripLabel1.Text = fileFullPath;
-            }
+            
+            toolStripLabel1.Text = TrimFilePath(fileFullPath, MAX_LEN);
             toolStripLabel1.ToolTipText = fileFullPath;
 
             GeneratePattern();
+        }
+
+        private string TrimFilePath(string fileFullPath, int maxLength)
+        {
+            var fileName = System.IO.Path.GetFileName(fileFullPath);
+            if (fileFullPath.Length > maxLength)
+            {
+                if (fileName.Length > maxLength)
+                    return "..." + fileFullPath.Substring(fileFullPath.Length - maxLength);
+                else
+                {
+                    var len = maxLength - fileName.Length;
+                    return fileFullPath.Substring(0, len) + "...\\" + fileName;
+                }
+            }
+            else
+                return fileFullPath;
         }
 
         private bool isPictureBoxLMouseDown = false;
         private bool isPictureBoxRMouseDown = false;
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
-            toolStripStatusLabel1.Text = e.Button.ToString();
+            //Debug(e.Button.ToString());
 
             if (e.Button == MouseButtons.Left)
                 isPictureBoxLMouseDown = true;
@@ -270,7 +266,7 @@ namespace Kvh.Kaleidoscope
 
             if (isPictureBoxLMouseDown && isPictureBoxRMouseDown)
             {
-                previousRdrSize = PatternSize;
+                previousPatternSize = PatternSize;
             }
 
             clickedLocation = e.Location;
@@ -311,12 +307,12 @@ namespace Kvh.Kaleidoscope
 
             if (isPictureBoxLMouseDown && isPictureBoxRMouseDown)
             {
-                if (previousRdrSize + dX > MAX_PATTERN_SIZE)
+                if (previousPatternSize + dX > MAX_PATTERN_SIZE)
                     PatternSize = MAX_PATTERN_SIZE;
-                else if (previousRdrSize + dX < MIN_PATTERN_SIZE)
+                else if (previousPatternSize + dX < MIN_PATTERN_SIZE)
                     PatternSize = MIN_PATTERN_SIZE;
                 else
-                    PatternSize = previousRdrSize + dX;
+                    PatternSize = previousPatternSize + dX;
             }
             else if (isPictureBoxLMouseDown)
             {
@@ -341,16 +337,10 @@ namespace Kvh.Kaleidoscope
             isUpdating = false;
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
-        {
-            openFileDialog1.ShowDialog();
-        }
-
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
             GeneratePattern();
             Render();
-
         }
 
         private void pictureBox1_MouseLeave(object sender, EventArgs e)
@@ -411,7 +401,6 @@ namespace Kvh.Kaleidoscope
                 GeneratePattern();
         }
 
-
         private void toolStripTextBox2_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var previousValue = patternXOffset;
@@ -436,7 +425,7 @@ namespace Kvh.Kaleidoscope
 
         private void toolStripTextBox6_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-
+            // TODO: validate angle
         }
 
         private bool ValidateInt(string text, int min, int max, string valueLabel, ref int valueToUpdate, Control control)
@@ -462,15 +451,7 @@ namespace Kvh.Kaleidoscope
             return false;
         }
 
-
-
         #endregion
-
-        private bool isTextBoxInFocusChanged = false;
-        private void toolStripTextBox_TextChanged(object sender, EventArgs e)
-        {
-            isTextBoxInFocusChanged = true;
-        }
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
@@ -486,13 +467,18 @@ namespace Kvh.Kaleidoscope
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-
             PatternSize = 250;
             PatternXOffset = 0;
             PatternYOffset = 0;
             PatternRotation = 0f;
             ImageScaledWidth = 400;
             ImageScaledHeight = 300;
+
+            renderWindow.Show();
+            renderWindow.WindowState = FormWindowState.Maximized;
+            //previewWindow.Show();
+
+            Activate();
         }
 
         public delegate void MouseMovedEvent();
@@ -551,8 +537,7 @@ namespace Kvh.Kaleidoscope
                  System.IO.Path.GetDirectoryName(openFileDialog1.FileName);
             saveFileDialog1.FileName =
                 "Kaleidoscope_" +
-                System.IO.Path.
-                GetFileNameWithoutExtension(openFileDialog1.FileName);
+                System.IO.Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
 
             var format = ImageFormat.Jpeg;
 
@@ -580,6 +565,9 @@ namespace Kvh.Kaleidoscope
                 try
                 {
                     renderWindow.PictureBox.Image.Save(saveFileDialog1.FileName, format);
+                    toolStripStatusLabel1.Text = "Image has been saved to " + TrimFilePath(saveFileDialog1.FileName, 64) + ".";
+                    toolStripStatusLabel1.Tag = saveFileDialog1.FileName;
+                    toolStripStatusLabel1.IsLink = true;
                 }
                 catch (Exception ex)
                 {
@@ -591,25 +579,20 @@ namespace Kvh.Kaleidoscope
 
         }
 
-        private void toolStripTextBox3_Leave(object sender, EventArgs e)
-        {
-            //if (isTextBoxInFocusChanged)
-            //{
-            //    Debug(((ToolStripItem)sender).Name + " triggered pattern generation.");
-            //    GeneratePattern();
-            //    isTextBoxInFocusChanged = false;
-            //}
-            //else
-            //{
-            //    Debug("Focus left from " + ((ToolStripItem)sender).Name + ", value unchanged.");
-            //}
-        }
-
         private void Debug(string msg)
         {
 #if DEBUG
             toolStripStatusLabel1.Text = msg;
 #endif
+        }
+
+        private void toolStripStatusLabel1_Click(object sender, EventArgs e)
+        {
+            if (toolStripStatusLabel1.IsLink)
+            {
+                Process.Start("EXPLORER.EXE", "/select, \"" + toolStripStatusLabel1.Tag.ToString() + "\"");
+                toolStripStatusLabel1.LinkVisited = true;
+            }
         }
     }
 }
