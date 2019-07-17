@@ -340,7 +340,7 @@
             this.toolStripButton4});
             this.toolStrip4.Location = new System.Drawing.Point(3, 50);
             this.toolStrip4.Name = "toolStrip4";
-            this.toolStrip4.Size = new System.Drawing.Size(630, 25);
+            this.toolStrip4.Size = new System.Drawing.Size(644, 25);
             this.toolStrip4.TabIndex = 3;
             // 
             // toolStripLabel3
@@ -446,8 +446,8 @@
             this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
             this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton4.Name = "toolStripButton4";
-            this.toolStripButton4.Size = new System.Drawing.Size(56, 22);
-            this.toolStripButton4.Text = "Random";
+            this.toolStripButton4.Size = new System.Drawing.Size(70, 22);
+            this.toolStripButton4.Text = "Randomise";
             this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
             // 
             // toolStrip3
