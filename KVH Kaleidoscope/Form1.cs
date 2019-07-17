@@ -568,6 +568,7 @@ namespace Kvh.Kaleidoscope
                     toolStripStatusLabel1.Text = "Image has been saved to " + TrimFilePath(saveFileDialog1.FileName, 64) + ".";
                     toolStripStatusLabel1.Tag = saveFileDialog1.FileName;
                     toolStripStatusLabel1.IsLink = true;
+                    toolStripStatusLabel1.LinkVisited = false;
                 }
                 catch (Exception ex)
                 {
