@@ -11,22 +11,22 @@ namespace Kvh.Kaleidoscope
 {
     public static class Kaleidoscope
     {
-        public static Bitmap Render(int width, int height, Bitmap pattern)
+        public static Bitmap Render(int width, int height, KaleidoscopeTemplate pattern)
         {
             if (pattern == null)
                 return null;
 
             Bitmap bitmap = new Bitmap(width, height);
-            var flippedXPattern = pattern.Clone() as Bitmap;
+            var flippedXPattern = pattern.Bitmap.Clone() as Bitmap;
             flippedXPattern.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
-            Bitmap[] patterns = { pattern, flippedXPattern };
+            Bitmap[] patterns = { pattern.Bitmap, flippedXPattern };
 
-            float patternWidth = pattern.Width;
-            float patternHeight = patternWidth * (float)Math.Sqrt(3) / 2;
+            //float patternWidth = pattern.Width;
+            //float patternHeight = patternWidth * (float)Math.Sqrt(3) / 2;
 
-            var nTotalCols = (int)Math.Round(width / patternWidth / 3, 0) + 2;
-            var nTotalRows = (int)Math.Round(height / patternHeight, 0) + 2;
+            var nTotalCols = (int)Math.Round(width / pattern.Width / 3, 0) + 2;
+            var nTotalRows = (int)Math.Round(height / pattern.Height, 0) + 2;
             var nTop = (int)Math.Round(nTotalRows / 2f, 0);
             var nLeft = (int)Math.Round(nTotalCols / 2f, 0); ;
 
@@ -40,25 +40,25 @@ namespace Kvh.Kaleidoscope
 
             if (nTop > 0)
             {
-                g.TranslateTransform(0, -nTop * patternHeight);
+                g.TranslateTransform(0, -nTop * pattern.Height);
             }
             for (var i = 0; i < nTotalRows; i++)
             {
                 if (i % 2 != 0)
                 {
-                    g.TranslateTransform(-Kaleidoscope2D.RowXOffsetFactor * patternWidth, 0);
-                    DrawRow(g, patterns, nLeft, nTotalCols + 1, patternWidth, patternHeight,
+                    g.TranslateTransform(-Kaleidoscope2D.RowXOffsetFactor * pattern.Width, 0);
+                    DrawRow(g, patterns, nLeft, nTotalCols + 1, pattern.Width, pattern.Height,
                         Kaleidoscope2D.XOffsetFactors, Kaleidoscope2D.YOffsetFactors,
                         Kaleidoscope2D.RotationAngles, Kaleidoscope2D.PatternIndices);
-                    g.TranslateTransform(Kaleidoscope2D.RowXOffsetFactor * patternWidth, 0);
+                    g.TranslateTransform(Kaleidoscope2D.RowXOffsetFactor * pattern.Width, 0);
                 }
                 else
                 {
-                    DrawRow(g, patterns, nLeft, nTotalCols, patternWidth, patternHeight,
+                    DrawRow(g, patterns, nLeft, nTotalCols, pattern.Width, pattern.Height,
                         Kaleidoscope2D.XOffsetFactors, Kaleidoscope2D.YOffsetFactors,
                         Kaleidoscope2D.RotationAngles, Kaleidoscope2D.PatternIndices);
                 }
-                g.TranslateTransform(0, patternHeight);
+                g.TranslateTransform(0, pattern.Height);
             }
             g.Dispose();
 

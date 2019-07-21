@@ -62,7 +62,9 @@ namespace Kvh.Kaleidoscope
         private float patternRotation;
 
         private Bitmap img;
-        private Bitmap pattern;
+        private KaleidoscopeTemplate template;
+        private KaleidoscopeTemplateExtractor kaleidoscopeTemplateExtractor;
+        //private Bitmap pattern;
 
         private Point clickedLocation;
         private int previousPatternSize = 250;
@@ -91,7 +93,8 @@ namespace Kvh.Kaleidoscope
 
             InitializeComponent();
 
-            //label1.Text = softwareInfo;
+            kaleidoscopeTemplateExtractor = new KaleidoscopeTemplateExtractor(SmoothingMode.HighQuality,
+                PixelOffsetMode.HighQuality, InterpolationMode.HighQualityBicubic);
 
             var filter =
                 "Joint Photographic Experts Group|*.jpg" +
@@ -140,8 +143,8 @@ namespace Kvh.Kaleidoscope
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            renderWindow.PictureBox.Image = Kvh.Kaleidoscope.Kaleidoscope.Render(
-                renderWindow.PictureBox.Width, renderWindow.PictureBox.Height, pattern);
+            renderWindow.PictureBox.Image = Kaleidoscope.Render(
+                renderWindow.PictureBox.Width, renderWindow.PictureBox.Height, template);
 
             stopwatch.Stop();
             SetStatus("Rendered in " + stopwatch.ElapsedMilliseconds + " ms.");
@@ -188,46 +191,13 @@ namespace Kvh.Kaleidoscope
             if (img == null)
                 return;
 
-            pictureBox1.Width = ImageScaledWidth + 2;
-            pictureBox1.Height = ImageScaledHeight + 2;
-
+            // TODO
             var angle = float.Parse(toolStripTextBox6.Text);
 
-            var imgRect = new Rectangle(0, 0, img.Width, img.Height);
-            var scaledImgRect = new RectangleF(0, 0, ImageScaledWidth, ImageScaledHeight);
+            template = kaleidoscopeTemplateExtractor.Extract(img, imageScaledWidth,
+                imageScaledHeight, PatternSize, PatternXOffset, PatternYOffset, PatternRotation, pictureBox1);
 
-            var patternWidth = PatternSize;
-            var patternHeight = patternWidth * (float)Math.Sqrt(3) / 2;
-
-            var clippingPath = new GraphicsPath();
-            clippingPath.AddPolygon(new[] {
-                new PointF(0, 0),
-                new PointF(patternWidth, 0),
-                new PointF(patternWidth/2, patternHeight)});
-
-            pattern = new Bitmap(patternWidth, (int)(Math.Round(patternHeight)));
-            var gPattern = Graphics.FromImage(pattern);
-            gPattern.SmoothingMode = SmoothingMode.HighQuality;
-            gPattern.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            gPattern.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            gPattern.Clip = new Region(clippingPath);
-            gPattern.RotateTransform(-angle);
-            gPattern.TranslateTransform(-PatternXOffset, -PatternYOffset);
-            gPattern.DrawImage(img, scaledImgRect, imgRect, GraphicsUnit.Pixel);
-            gPattern.Dispose();
-
-            var previewBmp = new Bitmap(ImageScaledWidth, ImageScaledHeight);
-            var gPreviewBmp = Graphics.FromImage(previewBmp);
-            gPreviewBmp.SmoothingMode = SmoothingMode.HighQuality;
-            gPreviewBmp.InterpolationMode = InterpolationMode.HighQualityBicubic;
-            gPreviewBmp.DrawImage(img, scaledImgRect, imgRect, GraphicsUnit.Pixel);
-            gPreviewBmp.TranslateTransform(PatternXOffset, PatternYOffset);
-            gPreviewBmp.RotateTransform(angle);
-            gPreviewBmp.DrawPath(new Pen(Brushes.Red), clippingPath);
-            gPreviewBmp.Dispose();
-
-            pictureBox1.Image = previewBmp;
-            previewWindow.PictureBox.Image = pattern;
+            previewWindow.PictureBox.Image = template.Bitmap;
 
             ActivatePreviewWindowAtBottomRight();
         }
