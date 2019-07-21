@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("KaDoscope_Beta0")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Kaleidoscope")]
+[assembly: AssemblyDescription("Kaleidoscope (Kính Vạn Hoa)")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("KaDoscope_Beta0")]
-[assembly: AssemblyCopyright("Copyright ©  2019")]
+[assembly: AssemblyCompany("Augustine's Software")]
+[assembly: AssemblyProduct("KVH :: Kaleidoscope")]
+[assembly: AssemblyCopyright("ᴉnq ʇɐᗡ ʎq 9102 © ʇɟǝ˥ʎdoƆ")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,7 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.0.0")]
+[assembly: AssemblyVersion("1.0.*")]
+//[assembly: AssemblyFileVersion("1.0.0.0")]
+
+

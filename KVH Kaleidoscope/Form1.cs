@@ -11,6 +11,12 @@ namespace Kvh.Kaleidoscope
 {
     public partial class Form1 : Form
     {
+        private static Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        private static DateTime buildDate = new DateTime(2000, 1, 1)
+                                .AddDays(version.Build).AddSeconds(version.Revision * 2);
+        private static string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+        string softwareInfo = $"{name} {version} by Đạt Bùi\r\n(Built {buildDate})";
+
         private readonly int MIN_PATTERN_SIZE = 100;
         private readonly int MAX_PATTERN_SIZE = 450;
         private readonly int MIN_IMG_SIZE = 100;
@@ -85,6 +91,8 @@ namespace Kvh.Kaleidoscope
 
             InitializeComponent();
 
+            //label1.Text = softwareInfo;
+
             var filter =
                 "Joint Photographic Experts Group|*.jpg" +
                 "|Portable Network Graphics|*.png" +
@@ -139,6 +147,8 @@ namespace Kvh.Kaleidoscope
             SetStatus("Rendered in " + stopwatch.ElapsedMilliseconds + " ms.");
 
             Opacity = 0.25;
+            if (!renderWindow.Visible)
+                renderWindow.Show();
             previewWindow.Opacity = 0.25;
         }
 
@@ -229,7 +239,7 @@ namespace Kvh.Kaleidoscope
 
             var MAX_LEN = 32;
             var fileFullPath = openFileDialog1.FileName;
-            
+
             toolStripLabel1.Text = TrimFilePath(fileFullPath, MAX_LEN);
             toolStripLabel1.ToolTipText = fileFullPath;
 
@@ -479,6 +489,8 @@ namespace Kvh.Kaleidoscope
             //previewWindow.Show();
 
             Activate();
+            PrintWatermark(panel1.CreateGraphics());
+            //PrintWatermark();
         }
 
         public delegate void MouseMovedEvent();
@@ -594,6 +606,29 @@ namespace Kvh.Kaleidoscope
                 Process.Start("EXPLORER.EXE", "/select, \"" + toolStripStatusLabel1.Tag.ToString() + "\"");
                 toolStripStatusLabel1.LinkVisited = true;
             }
+        }
+
+        private void PrintWatermark(Graphics g)
+        {
+            int margin = 5;
+            Rectangle rect = new Rectangle(margin, margin,
+                (int)g.VisibleClipBounds.Width - 2 * margin, (int)g.VisibleClipBounds.Height - 2 * margin);
+            g.Clear(panel1.BackColor);
+            Debug(rect.ToString());
+            using (Font font = new Font("Segoe UI", 9, FontStyle.Italic, GraphicsUnit.Point))
+            {
+                using (StringFormat sf = new StringFormat())
+                {
+                    sf.LineAlignment = StringAlignment.Far;
+                    sf.Alignment = StringAlignment.Far;
+                    g.DrawString(softwareInfo, font, Brushes.Black, rect, sf);
+                }
+            }
+        }
+
+        private void panel1_SizeChanged(object sender, EventArgs e)
+        {
+            PrintWatermark(panel1.CreateGraphics());
         }
     }
 }
