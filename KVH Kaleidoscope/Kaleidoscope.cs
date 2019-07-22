@@ -98,8 +98,8 @@ namespace Kvh.Kaleidoscope
                         {
                             if (y == 0)
                             {
-                                xIdx = new int[] { -1, -1, 0, 1, 1 };
-                                yIdx = new int[] { 0, 1, 1, 0, 1 };
+                                xIdx = new int[] { -1, -1, 0 };
+                                yIdx = new int[] { 0, 1, 1 };
                             }
                             else if (y == bmp.Height - 1)
                             {
