@@ -135,6 +135,7 @@ namespace Kvh.Kaleidoscope
         private void Render()
         {
             SetStatus("Rendering...");
+            this.Cursor = Cursors.WaitCursor;
             toolStripStatusLabel3.Text = renderWindow.PictureBox.Width + "";
             toolStripStatusLabel5.Text = renderWindow.PictureBox.Height + "";
 
@@ -143,11 +144,24 @@ namespace Kvh.Kaleidoscope
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            renderWindow.PictureBox.Image = Kaleidoscope.Render(
+            var tmp = Kaleidoscope.Render(
                 renderWindow.PictureBox.Width, renderWindow.PictureBox.Height, template);
 
+            renderWindow.PictureBox.Image = tmp;
+
             stopwatch.Stop();
-            SetStatus("Rendered in " + stopwatch.ElapsedMilliseconds + " ms.");
+            var renderTime = stopwatch.ElapsedMilliseconds;
+            SetStatus("Rendered in " + renderTime + " ms.");
+
+            SetStatus("Rendered in " + renderTime + " ms. Filling gaps...");
+            Application.DoEvents();
+            stopwatch.Restart();
+            Kaleidoscope.FillVoid(tmp);
+            stopwatch.Stop();
+            SetStatus("Rendered in " + renderTime + " ms. Filled gaps in " + stopwatch.ElapsedMilliseconds + " ms.");
+            renderWindow.PictureBox.Image = tmp;
+            this.Cursor = Cursors.Default;
+            Application.DoEvents();
 
             Opacity = 0.25;
             if (!renderWindow.Visible)
