@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Kvh.Kaleidoscope
 {
@@ -61,8 +56,93 @@ namespace Kvh.Kaleidoscope
                 g.TranslateTransform(0, pattern.Height);
             }
             g.Dispose();
-
+            //FillVoid(bitmap);
             return bitmap;
+        }
+
+        public static void FillVoid(Bitmap bmp)
+        {
+            int[] xIdx = new int[] { };
+            int[] yIdx = new int[] { };
+            int r = 0, g = 0, b = 0;
+
+            for (int x = 0; x < bmp.Width; x++)
+            {
+                for (int y = 0; y < bmp.Height; y++)
+                {
+                    Color clr = bmp.GetPixel(x, y);
+                    if (clr.A < 255)
+                    {
+                        r = 0;
+                        g = 0;
+                        b = 0;
+                        if (x == 0)
+                        {
+                            if (y == 0)
+                            {
+                                xIdx = new int[] { 0, 1, 1 };
+                                yIdx = new int[] { 1, 0, 1 };
+                            }
+                            else if (y == bmp.Height - 1)
+                            {
+                                xIdx = new int[] { 0, 1, 1 };
+                                yIdx = new int[] { -1, -1, 0 };
+                            }
+                            else
+                            {
+                                xIdx = new int[] { 0, 0, 1, 1, 1 };
+                                yIdx = new int[] { -1, 1, -1, 0, 1 };
+                            }
+                        }
+                        else if (x == bmp.Width - 1)
+                        {
+                            if (y == 0)
+                            {
+                                xIdx = new int[] { -1, -1, 0, 1, 1 };
+                                yIdx = new int[] { 0, 1, 1, 0, 1 };
+                            }
+                            else if (y == bmp.Height - 1)
+                            {
+                                xIdx = new int[] { -1, -1, 0 };
+                                yIdx = new int[] { -1, 0, -1 };
+                            }
+                            else
+                            {
+                                xIdx = new int[] { -1, -1, -1, 0, 0};
+                                yIdx = new int[] { -1, 0, 1, -1, 1,};
+                            }
+                        }
+                        else
+                        {
+                            if (y == 0)
+                            {
+                                xIdx = new int[] { -1, -1, 0, 1, 1 };
+                                yIdx = new int[] { 0, 1, 1, 0, 1 };
+                            }
+                            else if (y == bmp.Height - 1)
+                            {
+                                xIdx = new int[] { -1, -1, 0, 1, 1 };
+                                yIdx = new int[] { -1, 0, -1, -1, 0 };
+                            }
+                            else
+                            {
+                                xIdx = new int[] { -1, -1, -1, 0, 0, 1, 1, 1 };
+                                yIdx = new int[] { -1, 0, 1, -1, 1, -1, 0, 1 };
+                            }
+                        }
+                        for (var i = 0; i < xIdx.Length; i++)
+                        {
+                            r += bmp.GetPixel(x + xIdx[i], y + yIdx[i]).R;
+                            g += bmp.GetPixel(x + xIdx[i], y + yIdx[i]).G;
+                            b += bmp.GetPixel(x + xIdx[i], y + yIdx[i]).B;
+                        }
+                        r = r / xIdx.Length;
+                        g = g / xIdx.Length;
+                        b = b / xIdx.Length;
+                        bmp.SetPixel(x, y, Color.FromArgb(r, g, b));
+                    }
+                }
+            }
         }
 
         private static void DrawRow(Graphics g, Bitmap[] patterns,
@@ -83,9 +163,9 @@ namespace Kvh.Kaleidoscope
             g.TranslateTransform(-(nTotalCols - nLeft) * setWidth, 0);
         }
 
-        private static void DrawSet(Graphics g, Bitmap[] patterns, 
-            float patternWidth, float patternHeight, 
-            float[] xOffsetFactors, float [] yOffsetFactors, float[] rotationAngles, int[]patternIndices)
+        private static void DrawSet(Graphics g, Bitmap[] patterns,
+            float patternWidth, float patternHeight,
+            float[] xOffsetFactors, float[] yOffsetFactors, float[] rotationAngles, int[] patternIndices)
         {
             if (!((xOffsetFactors.Length == yOffsetFactors.Length) &&
                 (yOffsetFactors.Length == rotationAngles.Length) &&
