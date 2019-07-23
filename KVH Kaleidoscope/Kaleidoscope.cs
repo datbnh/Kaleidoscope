@@ -139,7 +139,7 @@ namespace Kvh.Kaleidoscope
                         r = r / xIdx.Length;
                         g = g / xIdx.Length;
                         b = b / xIdx.Length;
-                        bmp.SetPixel(x, y, Color.FromArgb(r, g, b));
+                        bmp.SetPixel(x, y, Color.FromArgb(255, r, g, b));
                     }
                 }
             }
