@@ -134,6 +134,7 @@ namespace Kvh.Kaleidoscope
 
         private void Render()
         {
+            toolStripContainer1.TopToolStripPanel.Enabled = false;
             SetStatus("Rendering...");
             this.Cursor = Cursors.WaitCursor;
             toolStripStatusLabel3.Text = renderWindow.PictureBox.Width + "";
@@ -161,6 +162,7 @@ namespace Kvh.Kaleidoscope
             SetStatus("Rendered in " + renderTime + " ms. Filled gaps in " + stopwatch.ElapsedMilliseconds + " ms.");
             renderWindow.PictureBox.Image = tmp;
             this.Cursor = Cursors.Default;
+            toolStripContainer1.TopToolStripPanel.Enabled = true;
             Application.DoEvents();
 
             Opacity = 0.25;
