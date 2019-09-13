@@ -1,6 +1,4 @@
-﻿#define DEBUG
-
-using System;
+﻿using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -12,46 +10,54 @@ namespace Kvh.Kaleidoscope
     public partial class Form1 : Form
     {
         private static Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+
         private static DateTime buildDate = new DateTime(2000, 1, 1)
                                 .AddDays(version.Build).AddSeconds(version.Revision * 2);
+
         private static string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-        string softwareInfo = $"{name} {version} by Đạt Bùi\r\n(Built {buildDate})";
+        private string softwareInfo = $"{name} {version} by Đạt Bùi\r\n(Built {buildDate})";
 
         private readonly int MIN_PATTERN_SIZE = 100;
         private readonly int MAX_PATTERN_SIZE = 450;
         private readonly int MIN_IMG_SIZE = 100;
         private readonly int MAX_IMG_SIZE = 4096;
 
-        private bool IsARLocked { get => toolStripButton3.Checked; set => toolStripButton3.Checked = value; }
+        private bool IsARLocked { get => toolStripButtonLockAR.Checked; set => toolStripButtonLockAR.Checked = value; }
+
         public int ImageScaledWidth
         {
             get => imageScaledWidth;
-            set { imageScaledWidth = value; toolStripTextBox3.Text = value.ToString(); }
+            set { imageScaledWidth = value; toolStripTextBoxScaledWidth.Text = value.ToString(); }
         }
+
         public int ImageScaledHeight
         {
             get => imageScaledHeight;
-            set { imageScaledHeight = value; toolStripTextBox4.Text = value.ToString(); }
+            set { imageScaledHeight = value; toolStripTextBoxScaledHeight.Text = value.ToString(); }
         }
+
         public int PatternSize
         {
             get => patternSize;
-            set { patternSize = value; toolStripTextBox1.Text = value.ToString(); }
+            set { patternSize = value; toolStripTextBoxClippingSize.Text = value.ToString(); }
         }
+
         public int PatternXOffset
         {
             get => patternXOffset;
-            set { patternXOffset = value; toolStripTextBox2.Text = value.ToString(); }
+            set { patternXOffset = value; toolStripTextBoxXOffset.Text = value.ToString(); }
         }
+
         public int PatternYOffset
         {
             get => patternYOffset;
-            set { patternYOffset = value; toolStripTextBox5.Text = value.ToString(); }
+            set { patternYOffset = value; toolStripTextBoxYOffset.Text = value.ToString(); }
         }
+
         public float PatternRotation
         {
             get => patternRotation;
-            set { patternRotation = value; toolStripTextBox6.Text = value.ToString(); }
+            set { patternRotation = value; toolStripTextBoxRotation.Text = value.ToString(); }
         }
 
         private int imageScaledWidth;
@@ -61,10 +67,9 @@ namespace Kvh.Kaleidoscope
         private int patternYOffset;
         private float patternRotation;
 
-        private Bitmap img;
+        private Bitmap sourceImage;
         private KaleidoscopeTemplate template;
         private KaleidoscopeTemplateExtractor kaleidoscopeTemplateExtractor;
-        //private Bitmap pattern;
 
         private Point clickedLocation;
         private int previousPatternSize = 250;
@@ -73,6 +78,7 @@ namespace Kvh.Kaleidoscope
         private float previousClipPathRotation;
 
         private RenderWindow renderWindow = new RenderWindow();
+
         private RenderWindow previewWindow = new RenderWindow()
         {
             Text = "Preview - KVH",
@@ -112,7 +118,8 @@ namespace Kvh.Kaleidoscope
         }
 
         private Point lastCursorPosition;
-        void gmhMouseMoved()
+
+        private void gmhMouseMoved()
         {
             Point cursorPosition = Cursor.Position;
             var dis = Math.Sqrt(
@@ -134,9 +141,12 @@ namespace Kvh.Kaleidoscope
 
         private void Render()
         {
+            if (sourceImage == null)
+                return;
+
             toolStripContainer1.TopToolStripPanel.Enabled = false;
             SetStatus("Rendering...");
-            this.Cursor = Cursors.WaitCursor;
+            Cursor = Cursors.WaitCursor;
             toolStripStatusLabel3.Text = renderWindow.PictureBox.Width + "";
             toolStripStatusLabel5.Text = renderWindow.PictureBox.Height + "";
 
@@ -152,16 +162,23 @@ namespace Kvh.Kaleidoscope
 
             stopwatch.Stop();
             var renderTime = stopwatch.ElapsedMilliseconds;
-            SetStatus("Rendered in " + renderTime + " ms.");
 
-            SetStatus("Rendered in " + renderTime + " ms. Filling gaps...");
-            Application.DoEvents();
-            stopwatch.Restart();
-            Kaleidoscope.FillVoid(tmp);
-            stopwatch.Stop();
-            SetStatus("Rendered in " + renderTime + " ms. Filled gaps in " + stopwatch.ElapsedMilliseconds + " ms.");
+            if (toolStripButtonAutoPatch.Checked)
+            {
+                SetStatus("Rendered in " + renderTime + " ms. Filling gaps...");
+                Application.DoEvents();
+                stopwatch.Restart();
+                Kaleidoscope.FillVoid(tmp);
+                stopwatch.Stop();
+                SetStatus("Rendered in " + renderTime + " ms. Filled gaps in " + stopwatch.ElapsedMilliseconds + " ms.");
+            }
+            else
+            {
+                SetStatus("Rendered in " + renderTime + " ms.");
+            }
+
             renderWindow.PictureBox.Image = tmp;
-            this.Cursor = Cursors.Default;
+            Cursor = Cursors.Default;
             toolStripContainer1.TopToolStripPanel.Enabled = true;
             Application.DoEvents();
 
@@ -183,14 +200,14 @@ namespace Kvh.Kaleidoscope
             try
             {
                 var tmp = new Bitmap(imgPath);
-                img = tmp.Clone() as Bitmap;
+                sourceImage = tmp.Clone() as Bitmap;
                 tmp.Dispose();
 
-                toolStripLabel2.Text = img.Width + " × " + img.Height;
+                toolStripLabelImageSize.Text = sourceImage.Width + " × " + sourceImage.Height;
 
-                if (IsARLocked && img != null)
+                if (IsARLocked && sourceImage != null)
                 {
-                    ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / img.Width * img.Height, 0));
+                    ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / sourceImage.Width * sourceImage.Height, 0));
                 }
             }
             catch (Exception ex)
@@ -198,19 +215,19 @@ namespace Kvh.Kaleidoscope
                 MessageBox.Show("Error loading image: " + ex.Message,
                     "Error Loading Image", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
-                toolStripLabel2.Text = "Invalid Image.";
+                toolStripLabelImageSize.Text = "Invalid Image.";
             }
         }
 
         private void GeneratePattern()
         {
-            if (img == null)
+            if (sourceImage == null)
                 return;
 
             // TODO
-            var angle = float.Parse(toolStripTextBox6.Text);
+            var angle = float.Parse(toolStripTextBoxRotation.Text);
 
-            template = kaleidoscopeTemplateExtractor.Extract(img, imageScaledWidth,
+            template = kaleidoscopeTemplateExtractor.Extract(sourceImage, imageScaledWidth,
                 imageScaledHeight, PatternSize, PatternXOffset, PatternYOffset, PatternRotation, pictureBox1);
 
             previewWindow.PictureBox.Image = template.Bitmap;
@@ -226,8 +243,8 @@ namespace Kvh.Kaleidoscope
             var MAX_LEN = 32;
             var fileFullPath = openFileDialog1.FileName;
 
-            toolStripLabel1.Text = TrimFilePath(fileFullPath, MAX_LEN);
-            toolStripLabel1.ToolTipText = fileFullPath;
+            toolStripLabelSourceImage.Text = TrimFilePath(fileFullPath, MAX_LEN);
+            toolStripLabelSourceImage.ToolTipText = fileFullPath;
 
             GeneratePattern();
         }
@@ -251,6 +268,7 @@ namespace Kvh.Kaleidoscope
 
         private bool isPictureBoxLMouseDown = false;
         private bool isPictureBoxRMouseDown = false;
+
         private void pictureBox1_MouseDown(object sender, MouseEventArgs e)
         {
             //Debug(e.Button.ToString());
@@ -279,12 +297,11 @@ namespace Kvh.Kaleidoscope
                 isPictureBoxRMouseDown = false;
         }
 
-
         private bool isUpdating = false;
         private Point previousUpdateLocation;
+
         private void pictureBox1_MouseMove(object sender, MouseEventArgs e)
         {
-
             if (!isPictureBoxLMouseDown && !isPictureBoxRMouseDown)
                 return;
 
@@ -359,11 +376,11 @@ namespace Kvh.Kaleidoscope
                  MIN_IMG_SIZE, MAX_IMG_SIZE,
                  "Width", ref imageScaledWidth, toolStrip2))
                 e.Cancel = true;
-            else if (IsARLocked && img != null)
+            else if (IsARLocked && sourceImage != null)
             {
                 if (previousValue != imageScaledWidth)
                 {
-                    ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / img.Width * img.Height, 0));
+                    ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / sourceImage.Width * sourceImage.Height, 0));
                     GeneratePattern();
                 }
             }
@@ -376,11 +393,11 @@ namespace Kvh.Kaleidoscope
                 MIN_IMG_SIZE, MAX_IMG_SIZE,
                 "Height", ref imageScaledHeight, toolStrip2))
                 e.Cancel = true;
-            else if (IsARLocked && img != null)
+            else if (IsARLocked && sourceImage != null)
             {
                 if (previousValue != imageScaledHeight)
                 {
-                    ImageScaledWidth = (int)(Math.Round((float)ImageScaledHeight / img.Height * img.Width, 0));
+                    ImageScaledWidth = (int)(Math.Round((float)ImageScaledHeight / sourceImage.Height * sourceImage.Width, 0));
                     GeneratePattern();
                 }
             }
@@ -447,7 +464,7 @@ namespace Kvh.Kaleidoscope
             return false;
         }
 
-        #endregion
+        #endregion text box validating
 
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
@@ -499,7 +516,7 @@ namespace Kvh.Kaleidoscope
                 return false;
             }
 
-            #endregion
+            #endregion IMessageFilter Members
         }
 
         private void toolStripButton1_Click_1(object sender, EventArgs e)
@@ -514,7 +531,6 @@ namespace Kvh.Kaleidoscope
             var y = Location.Y + Size.Height - previewWindow.Size.Height;
 
             previewWindow.Location = new Point(x, y);
-
 
             if (previewWindow.Right > Screen.PrimaryScreen.WorkingArea.Right)
                 x = Screen.PrimaryScreen.WorkingArea.Right - previewWindow.Size.Width;
@@ -547,15 +563,19 @@ namespace Kvh.Kaleidoscope
                     case ".jpg":
                         format = ImageFormat.Jpeg;
                         break;
+
                     case ".bmp":
                         format = ImageFormat.Bmp;
                         break;
+
                     case ".png":
                         format = ImageFormat.Png;
                         break;
+
                     case ".exif":
                         format = ImageFormat.Exif;
                         break;
+
                     case ".tiff":
                         format = ImageFormat.Tiff;
                         break;
@@ -575,7 +595,6 @@ namespace Kvh.Kaleidoscope
                         MessageBoxIcon.Error);
                 }
             }
-
         }
 
         private void Debug(string msg)
@@ -615,6 +634,39 @@ namespace Kvh.Kaleidoscope
         private void panel1_SizeChanged(object sender, EventArgs e)
         {
             PrintWatermark(panel1.CreateGraphics());
+        }
+
+        private void toolStripButtonAutoPatch_Click(object sender, EventArgs e)
+        {
+            toolStripButtonPatch.Enabled = !toolStripButtonAutoPatch.Checked;
+        }
+
+        private void toolStripButtonPatch_Click(object sender, EventArgs e)
+        {
+            var tmp = (Bitmap)renderWindow.PictureBox.Image;
+            if (tmp == null)
+                return;
+
+            toolStripContainer1.TopToolStripPanel.Enabled = false;
+            SetStatus("Filling gaps...");
+            Cursor = Cursors.WaitCursor;
+            Application.DoEvents();
+
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            Kaleidoscope.FillVoid(tmp);
+            stopwatch.Stop();
+            SetStatus("Filled gaps in " + stopwatch.ElapsedMilliseconds + " ms.");
+
+            renderWindow.PictureBox.Image = tmp;
+            Cursor = Cursors.Default;
+            toolStripContainer1.TopToolStripPanel.Enabled = true;
+            Application.DoEvents();
+
+            Opacity = 0.25;
+            if (!renderWindow.Visible)
+                renderWindow.Show();
+            previewWindow.Opacity = 0.25;
         }
     }
 }
