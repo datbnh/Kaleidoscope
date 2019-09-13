@@ -17,9 +17,6 @@ namespace Kvh.Kaleidoscope
 
             Bitmap[] patterns = { pattern.Bitmap, flippedXPattern };
 
-            //float patternWidth = pattern.Width;
-            //float patternHeight = patternWidth * (float)Math.Sqrt(3) / 2;
-
             var nTotalCols = (int)Math.Round(width / pattern.Width / 3, 0) + 2;
             var nTotalRows = (int)Math.Round(height / pattern.Height, 0) + 2;
             var nTop = (int)Math.Round(nTotalRows / 2f, 0);
@@ -108,8 +105,8 @@ namespace Kvh.Kaleidoscope
                             }
                             else
                             {
-                                xIdx = new int[] { -1, -1, -1, 0, 0};
-                                yIdx = new int[] { -1, 0, 1, -1, 1,};
+                                xIdx = new int[] { -1, -1, -1, 0, 0 };
+                                yIdx = new int[] { -1, 0, 1, -1, 1, };
                             }
                         }
                         else
