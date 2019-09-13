@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Kvh.Kaleidoscope
@@ -26,7 +22,7 @@ namespace Kvh.Kaleidoscope
             UseAlphaBlend = useAlphaBlend;
         }
 
-        public KaleidoscopeTemplate Extract(Bitmap originalImage, 
+        public KaleidoscopeTemplate Extract(Bitmap originalImage,
             int scaledWidth, int scaledHeight,
             int templateSize, int x, int y, float angle, PictureBox pictureBox)
         {
@@ -42,17 +38,16 @@ namespace Kvh.Kaleidoscope
                 new PointF(patternWidth, 0),
                 new PointF(patternWidth/2, patternHeight)});
 
-            Bitmap pattern = new Bitmap(patternWidth, (int)Math.Round(patternHeight,0));
+            Bitmap pattern = new Bitmap(patternWidth, (int)Math.Round(patternHeight, 0));
             var gPattern = Graphics.FromImage(pattern);
             gPattern.SmoothingMode = SmoothingMode;
             gPattern.PixelOffsetMode = PixelOffsetMode;
             gPattern.InterpolationMode = InterpolationMode;
 
-
             if (UseAlphaBlend)
             {
                 var overlapping = 0;
-                var maskWidth = templateSize + 2* overlapping;
+                var maskWidth = templateSize + 2 * overlapping;
                 var maskHeight = maskWidth * (float)Math.Sqrt(3) / 2;
 
                 var maskPath = new GraphicsPath();
@@ -60,7 +55,6 @@ namespace Kvh.Kaleidoscope
                 new PointF(-overlapping, -overlapping*(float)Math.Sqrt(3)/2),
                 new PointF(maskWidth, -overlapping*(float)Math.Sqrt(3)/2),
                 new PointF(maskWidth/2, maskHeight)});
-
 
                 var alphaMask = new Bitmap(patternWidth, (int)(Math.Round(patternHeight)));
                 var gMask = Graphics.FromImage(alphaMask);
@@ -114,8 +108,7 @@ namespace Kvh.Kaleidoscope
             return new KaleidoscopeTemplate(pattern, patternWidth, patternHeight);
         }
 
-
-        // 
+        //
         public static void ApplyAlphaMask(Bitmap bmp, Bitmap alphaMaskImage)
         {
             int width = bmp.Width;
