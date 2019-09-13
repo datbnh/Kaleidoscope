@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Augustine's Software")]
 [assembly: AssemblyProduct("KVH :: Kaleidoscope")]
-[assembly: AssemblyCopyright("ᴉnq ʇɐᗡ ʎq 9102 © ʇɟǝ˥ʎdoƆ")]
+[assembly: AssemblyCopyright("Copyleft (ɔ) 2019 by Dat Bui (Augustine)")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
