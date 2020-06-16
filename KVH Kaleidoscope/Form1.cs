@@ -168,7 +168,7 @@ namespace Kvh.Kaleidoscope
                 SetStatus("Rendered in " + renderTime + " ms. Filling gaps...");
                 Application.DoEvents();
                 stopwatch.Restart();
-                Kaleidoscope.FillVoid(tmp);
+                GraphicsExtensions.FillGaps(tmp);
                 stopwatch.Stop();
                 SetStatus("Rendered in " + renderTime + " ms. Filled gaps in " + stopwatch.ElapsedMilliseconds + " ms.");
             }
@@ -654,7 +654,7 @@ namespace Kvh.Kaleidoscope
 
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
-            Kaleidoscope.FillVoid(tmp);
+            GraphicsExtensions.FillGaps(tmp);
             stopwatch.Stop();
             SetStatus("Filled gaps in " + stopwatch.ElapsedMilliseconds + " ms.");
 
