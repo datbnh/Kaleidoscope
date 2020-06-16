@@ -13,8 +13,8 @@ namespace Kvh.Kaleidoscope
         public SmoothingMode SmoothingMode;
         public PixelOffsetMode PixelOffsetMode;
         public InterpolationMode InterpolationMode;
-        public bool UseAlphaBlend;
 
+        //TODO: add external documentation for these magic numbers :)
         private readonly float[] XOffsetFactors = { -.5f, 0, 1f, 1.5f, 2.5f, 3, 2.5f, 0, 1, 1.5f, 1, 1.5f, 2.5f, 3 };
         private readonly float[] YOffsetFactors = { 2, 1, 1, 2, 2, 1, 2, 1, 1, 0, 1, 0, 0, 1 };
         private readonly float[] RotationAngles = { -60, 0, 60, -120, 180, 120, -60, -120, 180, 120, -60, 0, 60, -120 };
@@ -49,13 +49,11 @@ namespace Kvh.Kaleidoscope
             flippedXTemplate.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
             Bitmap[] patterns = { template, flippedXTemplate };
-            //Console.WriteLine(bitmap.Width + " " + bitmap.Height);
 
             var g = Graphics.FromImage(bitmap);
-            g.InterpolationMode = InterpolationMode;//.HighQualityBicubic;
-            g.SmoothingMode = SmoothingMode;//.HighQuality;
-            g.PixelOffsetMode = PixelOffsetMode;//.HighQuality;
-            //g.Clear(Color.Transparent);
+            g.InterpolationMode = InterpolationMode;
+            g.SmoothingMode = SmoothingMode;
+            g.PixelOffsetMode = PixelOffsetMode;
 
             g.DrawSet(patterns,
                 floatSize.X, floatSize.Y,
@@ -64,7 +62,6 @@ namespace Kvh.Kaleidoscope
 
             GraphicsExtensions.FillGaps(bitmap);
 
-            //Console.WriteLine(bitmap.Width + " " + bitmap.Height + "*");
             return bitmap;
         }
 

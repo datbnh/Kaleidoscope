@@ -23,7 +23,6 @@ namespace Kvh.Kaleidoscope
                 InterpolationMode = InterpolationMode.HighQualityBicubic,
                 PixelOffsetMode = PixelOffsetMode.HighQuality,
                 SmoothingMode = SmoothingMode.HighQuality,
-                UseAlphaBlend = false,
             };
 
             var pattern = k.GetTileableRectangularPattern(template.Bitmap);
