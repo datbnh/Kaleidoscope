@@ -45,7 +45,6 @@
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             this.pictureBox1.DoubleClick += new System.EventHandler(this.RenderWindow_DoubleClick);
-            this.pictureBox1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.RenderWindow_MouseUp);
             // 
             // panel1
             // 
@@ -57,7 +56,6 @@
             this.panel1.Size = new System.Drawing.Size(286, 249);
             this.panel1.TabIndex = 1;
             this.panel1.DoubleClick += new System.EventHandler(this.RenderWindow_DoubleClick);
-            this.panel1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.RenderWindow_MouseUp);
             // 
             // RenderWindow
             // 
@@ -73,7 +71,6 @@
             this.Text = "Render Window - KVH";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.RenderWindow_FormClosing);
             this.DoubleClick += new System.EventHandler(this.RenderWindow_DoubleClick);
-            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.RenderWindow_MouseUp);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();

@@ -10,7 +10,6 @@ namespace Kvh.Kaleidoscope
             InitializeComponent();
         }
 
-        public Image I { get => pictureBox1.Image; set => pictureBox1.Image = value; }
         public PictureBox PictureBox { get => pictureBox1; }
 
         private void RenderWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -19,14 +18,6 @@ namespace Kvh.Kaleidoscope
             {
                 e.Cancel = true;
                 this.Hide();
-            }
-        }
-
-        private void RenderWindow_MouseUp(object sender, MouseEventArgs e)
-        {
-            if (e.Clicks == 2)
-            {
-
             }
         }
 
