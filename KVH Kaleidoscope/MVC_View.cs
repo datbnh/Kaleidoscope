@@ -13,13 +13,13 @@ namespace Kvh.Kaleidoscope
         public MVC_Model Model;
 
 
-        private static Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+        private static readonly Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 
-        private static DateTime buildDate = new DateTime(2000, 1, 1)
+        private static readonly DateTime buildDate = new DateTime(2000, 1, 1)
                                 .AddDays(version.Build).AddSeconds(version.Revision * 2);
 
-        private static string name = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
-        private string softwareInfo = $"{name} {version} by Đạt Bùi\r\n(Built {buildDate})";
+        private static readonly string assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
+        private static readonly string softwareInfo = $"{assemblyName} {version} by Đạt Bùi\r\n(Built {buildDate})";
 
         private readonly int MIN_PATTERN_SIZE = 100;
         private readonly int MAX_PATTERN_SIZE = 450;
@@ -91,34 +91,34 @@ namespace Kvh.Kaleidoscope
 
         public MVC_View()
         {
-            GlobalMouseHandler gmh = new GlobalMouseHandler();
-            gmh.TheMouseMoved += new MouseMovedEvent(gmhMouseMoved);
-            Application.AddMessageFilter(gmh);
+            InitializeGlobalMouseHandler();
 
             previewWindow.PictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
+            previewWindow.TopLevel = true;
+            previewWindow.TopMost = true;
+            this.TopLevel = true;
 
             InitializeComponent();
 
-            var filter =
-                "Joint Photographic Experts Group|*.jpg" +
-                "|Portable Network Graphics|*.png" +
-                "|BMP|*.bmp" +
-                "|Graphics Interchange Format|*.gif" +
-                "|Exchangeable Image File|*.exif" +
-                "|Tag Image File Format|*.tiff";
-            var filterOpen = "|All Picture Files|*.jpg;*.png;*.bmp;*.gif;*.exif;*.tiff|All Files|*.*";
-            saveFileDialog1.Filter = filter;
-            saveFileDialog1.DefaultExt = "jpg";
-            saveFileDialog1.FilterIndex = 1;
-            openFileDialog1.Filter = filter + filterOpen;
-            openFileDialog1.FilterIndex = 7;
+            InitializeFileDialogs();
         }
 
+        private void InitializeGlobalMouseHandler()
+        {
+            GlobalMouseHandler globalMouseHandler = new GlobalMouseHandler();
+            globalMouseHandler.TheMouseMoved += new MouseMovedEvent(GlobalMouseHandler_MouseMoved);
+            Application.AddMessageFilter(globalMouseHandler);
+        }
 
+        private void InitializeFileDialogs()
+        {
+            saveFileDialog1.InitFiltersAsImageSaveFileDialog();
+            openFileDialog1.InitFiltersAsImageOpenFileDialog();
+        }
 
         private Point lastCursorPosition;
 
-        private void gmhMouseMoved()
+        private void GlobalMouseHandler_MouseMoved()
         {
             Point cursorPosition = Cursor.Position;
             var dis = Math.Sqrt(
@@ -164,8 +164,8 @@ namespace Kvh.Kaleidoscope
                             Model.TemplateExtractionOffsetX,
                             Model.TemplateExtractionOffsetY,
                             Model.TemplateExtractionRotaion)), 1920, 1080);
-                        //renderWindow.PictureBox.Width, 
-                        //renderWindow.PictureBox.Height);
+            //renderWindow.PictureBox.Width, 
+            //renderWindow.PictureBox.Height);
 
             renderWindow.PictureBox.Image = tmp;
 
@@ -204,30 +204,6 @@ namespace Kvh.Kaleidoscope
             toolStripStatusLabel1.Invalidate();
         }
 
-        //private void LoadImage(string imgPath)
-        //{
-        //    try
-        //    {
-        //        var tmp = new Bitmap(imgPath);
-        //        sourceImage = tmp.Clone() as Bitmap;
-        //        tmp.Dispose();
-
-        //        toolStripLabelImageSize.Text = sourceImage.Width + " × " + sourceImage.Height;
-
-        //        if (IsARLocked && sourceImage != null)
-        //        {
-        //            ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / sourceImage.Width * sourceImage.Height, 0));
-        //        }
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        MessageBox.Show("Error loading image: " + ex.Message,
-        //            "Error Loading Image", MessageBoxButtons.OK,
-        //            MessageBoxIcon.Error);
-        //        toolStripLabelImageSize.Text = "Invalid Image.";
-        //    }
-        //}
-
         private void UpdateExtractionParametersToModel()
         {
             Controller.SetTemplateExtractionParameters(patternSize, patternXOffset, patternYOffset, PatternRotation);
@@ -235,6 +211,11 @@ namespace Kvh.Kaleidoscope
         }
 
         private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            LoadAndResizeSourceImage();
+        }
+
+        private void LoadAndResizeSourceImage()
         {
             Controller.LoadSourceImage(openFileDialog1.FileName);
             if (Model.SourceImage == null)
@@ -316,27 +297,15 @@ namespace Kvh.Kaleidoscope
 
             if (isPictureBoxLMouseDown && isPictureBoxRMouseDown)
             {
-                if (previousPatternSize + dX > MAX_PATTERN_SIZE)
-                    PatternSize = MAX_PATTERN_SIZE;
-                else if (previousPatternSize + dX < MIN_PATTERN_SIZE)
-                    PatternSize = MIN_PATTERN_SIZE;
-                else
-                    PatternSize = previousPatternSize + dX;
+                MoveTemplateClippingArea(dX);
             }
             else if (isPictureBoxLMouseDown)
             {
-                PatternXOffset = previousClipPathOffsetX + dX;
-                PatternYOffset = previousClipPathOffsetY + dY;
+                ResizeTemplateClippingArea(dX, dY);
             }
             else
             {
-                var rotation = previousClipPathRotation - dX / 10f;
-                if (rotation > 360)
-                    PatternRotation = rotation - 360;
-                else if (rotation < 0)
-                    PatternRotation = rotation + 360;
-                else
-                    PatternRotation = rotation;
+                RotateTemplateClippingArea(dX);
             }
 
             isUpdating = true;
@@ -344,6 +313,33 @@ namespace Kvh.Kaleidoscope
             previousUpdateLocation = e.Location;
             GC.Collect();
             isUpdating = false;
+
+            void MoveTemplateClippingArea(int _dX)
+            {
+                if (previousPatternSize + _dX > MAX_PATTERN_SIZE)
+                    PatternSize = MAX_PATTERN_SIZE;
+                else if (previousPatternSize + _dX < MIN_PATTERN_SIZE)
+                    PatternSize = MIN_PATTERN_SIZE;
+                else
+                    PatternSize = previousPatternSize + _dX;
+            }
+
+            void ResizeTemplateClippingArea(int _dX, int _dY)
+            {
+                PatternXOffset = previousClipPathOffsetX + _dX;
+                PatternYOffset = previousClipPathOffsetY + _dY;
+            }
+
+            void RotateTemplateClippingArea(int _dX)
+            {
+                var rotation = previousClipPathRotation - _dX / 10f;
+                if (rotation > 360)
+                    PatternRotation = rotation - 360;
+                else if (rotation < 0)
+                    PatternRotation = rotation + 360;
+                else
+                    PatternRotation = rotation;
+            }
         }
 
         private void toolStripButton2_Click(object sender, EventArgs e)
@@ -362,8 +358,6 @@ namespace Kvh.Kaleidoscope
         {
             openFileDialog1.ShowDialog();
         }
-
-        #region text box validating
 
         private void toolStripTextBox3_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
@@ -460,8 +454,6 @@ namespace Kvh.Kaleidoscope
             return false;
         }
 
-        #endregion text box validating
-
         private void toolStripButton4_Click(object sender, EventArgs e)
         {
             var random = new Random((int)DateTime.Now.Ticks);
@@ -500,8 +492,6 @@ namespace Kvh.Kaleidoscope
 
             public event MouseMovedEvent TheMouseMoved;
 
-            #region IMessageFilter Members
-
             public bool PreFilterMessage(ref Message m)
             {
                 if (m.Msg == WM_MOUSEMOVE)
@@ -512,7 +502,6 @@ namespace Kvh.Kaleidoscope
                 return false;
             }
 
-            #endregion IMessageFilter Members
         }
 
         private void toolStripButton1_Click_1(object sender, EventArgs e)
@@ -549,47 +538,9 @@ namespace Kvh.Kaleidoscope
                 "Kaleidoscope_" +
                 System.IO.Path.GetFileNameWithoutExtension(openFileDialog1.FileName);
 
-            var format = ImageFormat.Jpeg;
-
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
-                string ext = System.IO.Path.GetExtension(saveFileDialog1.FileName);
-                switch (ext)
-                {
-                    case ".jpg":
-                        format = ImageFormat.Jpeg;
-                        break;
-
-                    case ".bmp":
-                        format = ImageFormat.Bmp;
-                        break;
-
-                    case ".png":
-                        format = ImageFormat.Png;
-                        break;
-
-                    case ".exif":
-                        format = ImageFormat.Exif;
-                        break;
-
-                    case ".tiff":
-                        format = ImageFormat.Tiff;
-                        break;
-                }
-                try
-                {
-                    renderWindow.PictureBox.Image.Save(saveFileDialog1.FileName, format);
-                    toolStripStatusLabel1.Text = "Image has been saved to " + TrimFilePath(saveFileDialog1.FileName, 64) + ".";
-                    toolStripStatusLabel1.Tag = saveFileDialog1.FileName;
-                    toolStripStatusLabel1.IsLink = true;
-                    toolStripStatusLabel1.LinkVisited = false;
-                }
-                catch (Exception ex)
-                {
-                    MessageBox.Show("Error saving image: " + ex.Message,
-                        "Error Saving Image", MessageBoxButtons.OK,
-                        MessageBoxIcon.Error);
-                }
+                Controller.SaveRenderedImage(saveFileDialog1.FileName);
             }
         }
 
@@ -597,6 +548,7 @@ namespace Kvh.Kaleidoscope
         {
 #if DEBUG
             toolStripStatusLabel1.Text = msg;
+            Console.WriteLine(msg);
 #endif
         }
 

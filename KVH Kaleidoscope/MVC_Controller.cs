@@ -130,16 +130,15 @@ namespace Kvh.Kaleidoscope
             }
         }
 
-        private void SaveRenderedImage(string imgPath, ImageFormat format)
+        public void SaveRenderedImage(string imgPath)
         {
-            var image = model.RenderedImage;
-            if (image == null)
+            if (model.RenderedImage == null)
                 return;
-            model.RenderedImageFullPath = imgPath;
 
             try
             {
-                image.Save(model.RenderedImageFullPath, format);
+                model.RenderedImageFullPath = imgPath;
+                model.RenderedImage.SaveAsFile(model.RenderedImageFullPath);
                 view.UpdateSavedImageInfo();
             }
             catch (Exception ex)
