@@ -21,5 +21,31 @@ namespace Kvh.Kaleidoscope
                 this.Hide();
             }
         }
+
+        private void RenderWindow_MouseUp(object sender, MouseEventArgs e)
+        {
+            if (e.Clicks == 2)
+            {
+
+            }
+        }
+
+        private void RenderWindow_DoubleClick(object sender, System.EventArgs e)
+        {
+            if (FormBorderStyle == FormBorderStyle.None)
+            {
+                FormBorderStyle = FormBorderStyle.Sizable;
+
+            }
+            else
+            {
+                FormBorderStyle = FormBorderStyle.None;
+                if (WindowState == FormWindowState.Maximized)
+                {
+                    WindowState = FormWindowState.Normal;
+                }
+                WindowState = FormWindowState.Maximized;
+            }
+        }
     }
 }
