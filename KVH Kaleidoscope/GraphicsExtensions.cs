@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +11,72 @@ namespace Kvh.Kaleidoscope
 {
     public static class GraphicsExtensions
     {
+
+        /// <summary>
+        /// Resize the image to the specified width and height.
+        /// <para>
+        /// Source: https://stackoverflow.com/questions/1922040/how-to-resize-an-image-c-sharp
+        /// </para>
+        /// </summary>
+        /// <param name="image">The image to resize.</param>
+        /// <param name="width">The width to resize to.</param>
+        /// <param name="height">The height to resize to.</param>
+        /// <returns>The resized image.</returns>
+        public static Bitmap ResizeImage(Image image, int width, int height)
+        {
+            var destRect = new Rectangle(0, 0, width, height);
+            var destImage = new Bitmap(width, height);
+
+            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+
+            using (var graphics = Graphics.FromImage(destImage))
+            {
+                graphics.CompositingMode = CompositingMode.SourceCopy;
+                graphics.CompositingQuality = CompositingQuality.HighQuality;
+                graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                graphics.SmoothingMode = SmoothingMode.HighQuality;
+                graphics.PixelOffsetMode = PixelOffsetMode.HighQuality;
+
+                using (var wrapMode = new ImageAttributes())
+                {
+                    wrapMode.SetWrapMode(WrapMode.TileFlipXY);
+                    graphics.DrawImage(image, destRect, 0, 0, image.Width, image.Height, GraphicsUnit.Pixel, wrapMode);
+                }
+            }
+
+            return destImage;
+        }
+
+        public static Bitmap CentreAlignedTile(Bitmap image, int width, int height)
+        {
+            Bitmap bitmap = new Bitmap(width, height);
+
+            var nTotalCols = (int)Math.Round((float)width / image.Width + 0.5f, 0);
+            var nTotalRows = (int)Math.Round((float)height / image.Height + 0.5f, 0);
+
+            var initOffsetX = (width - nTotalCols * image.Width) / 2;
+            var initOffsetY = (height - nTotalRows * image.Height) / 2;
+
+            var g = Graphics.FromImage(bitmap);
+            g.InterpolationMode = InterpolationMode.HighQualityBicubic;
+            g.SmoothingMode = SmoothingMode.HighQuality;
+            g.PixelOffsetMode = PixelOffsetMode.HighQuality;
+            g.Clear(Color.Transparent);
+
+            for (int i = 0; i < nTotalRows; i++)
+            {
+                for (int j = 0; j < nTotalCols; j++)
+                {
+                    var x = j * image.Width + initOffsetX;
+                    var y = i * image.Height + initOffsetY;
+                    g.DrawImage(image, new PointF(x, y));
+                    Console.WriteLine("> " + x + " " + y);
+                }
+            }
+
+            g.Dispose();
+            return bitmap;
+        }
 
         /// <summary>
         /// Lets grpahic g draw the specified bitmap at location (x, y) rotated by an angle (degree).

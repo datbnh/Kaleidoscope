@@ -13,7 +13,10 @@ namespace Kvh.Kaleidoscope
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            var view = new MVC_View();
+            var model = new MVC_Model();
+            MVC_Controller controller = new MVC_Controller(view, model);
+            Application.Run(view);
         }
     }
 }

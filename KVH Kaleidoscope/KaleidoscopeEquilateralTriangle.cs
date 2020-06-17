@@ -72,7 +72,7 @@ namespace Kvh.Kaleidoscope
             clippingPath.AddPolygon(new[] {
                 new PointF(0, 0),
                 new PointF(pSize.X, 0),
-                new PointF(pSize.X, pSize.Y)});
+                new PointF(pSize.X/2, pSize.Y)});
             return clippingPath;
         }
 

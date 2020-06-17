@@ -7,8 +7,12 @@ using System.Windows.Forms;
 
 namespace Kvh.Kaleidoscope
 {
-    public partial class Form1 : Form
+    public partial class MVC_View : Form
     {
+        public MVC_Controller Controller;
+        public MVC_Model Model;
+
+
         private static Version version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
 
         private static DateTime buildDate = new DateTime(2000, 1, 1)
@@ -48,6 +52,8 @@ namespace Kvh.Kaleidoscope
             set { patternXOffset = value; toolStripTextBoxXOffset.Text = value.ToString(); }
         }
 
+
+
         public int PatternYOffset
         {
             get => patternYOffset;
@@ -67,10 +73,6 @@ namespace Kvh.Kaleidoscope
         private int patternYOffset;
         private float patternRotation;
 
-        private Bitmap sourceImage;
-        private KaleidoscopeTemplate template;
-        private KaleidoscopeTemplateExtractor kaleidoscopeTemplateExtractor;
-
         private Point clickedLocation;
         private int previousPatternSize = 250;
         private int previousClipPathOffsetX;
@@ -87,9 +89,7 @@ namespace Kvh.Kaleidoscope
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
         };
 
-        private string imgFileName;
-
-        public Form1()
+        public MVC_View()
         {
             GlobalMouseHandler gmh = new GlobalMouseHandler();
             gmh.TheMouseMoved += new MouseMovedEvent(gmhMouseMoved);
@@ -98,9 +98,6 @@ namespace Kvh.Kaleidoscope
             previewWindow.PictureBox.SizeMode = PictureBoxSizeMode.AutoSize;
 
             InitializeComponent();
-
-            kaleidoscopeTemplateExtractor = new KaleidoscopeTemplateExtractor(SmoothingMode.HighQuality,
-                PixelOffsetMode.HighQuality, InterpolationMode.HighQualityBicubic);
 
             var filter =
                 "Joint Photographic Experts Group|*.jpg" +
@@ -116,6 +113,8 @@ namespace Kvh.Kaleidoscope
             openFileDialog1.Filter = filter + filterOpen;
             openFileDialog1.FilterIndex = 7;
         }
+
+
 
         private Point lastCursorPosition;
 
@@ -141,8 +140,9 @@ namespace Kvh.Kaleidoscope
 
         private void Render()
         {
-            if (sourceImage == null)
-                return;
+            //if (sourceImage == null)
+            //    return;
+            UpdateExtractionParametersToModel();
 
             toolStripContainer1.TopToolStripPanel.Enabled = false;
             SetStatus("Rendering...");
@@ -155,8 +155,17 @@ namespace Kvh.Kaleidoscope
             Stopwatch stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            var tmp = Kaleidoscope.Render(
-                renderWindow.PictureBox.Width, renderWindow.PictureBox.Height, template);
+            var tmp = GraphicsExtensions.
+                CentreAlignedTile(
+                    Model.Kaleidoscope.GetTileableRectangularPattern(
+                        Model.Kaleidoscope.ExtractTemplate(
+                            Model.ScaledImage,
+                            Model.TemplateExtractionSize,
+                            Model.TemplateExtractionOffsetX,
+                            Model.TemplateExtractionOffsetY,
+                            Model.TemplateExtractionRotaion)), 1920, 1080);
+                        //renderWindow.PictureBox.Width, 
+                        //renderWindow.PictureBox.Height);
 
             renderWindow.PictureBox.Image = tmp;
 
@@ -195,58 +204,45 @@ namespace Kvh.Kaleidoscope
             toolStripStatusLabel1.Invalidate();
         }
 
-        private void LoadImage(string imgPath)
+        //private void LoadImage(string imgPath)
+        //{
+        //    try
+        //    {
+        //        var tmp = new Bitmap(imgPath);
+        //        sourceImage = tmp.Clone() as Bitmap;
+        //        tmp.Dispose();
+
+        //        toolStripLabelImageSize.Text = sourceImage.Width + " × " + sourceImage.Height;
+
+        //        if (IsARLocked && sourceImage != null)
+        //        {
+        //            ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / sourceImage.Width * sourceImage.Height, 0));
+        //        }
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error loading image: " + ex.Message,
+        //            "Error Loading Image", MessageBoxButtons.OK,
+        //            MessageBoxIcon.Error);
+        //        toolStripLabelImageSize.Text = "Invalid Image.";
+        //    }
+        //}
+
+        private void UpdateExtractionParametersToModel()
         {
-            try
-            {
-                var tmp = new Bitmap(imgPath);
-                sourceImage = tmp.Clone() as Bitmap;
-                tmp.Dispose();
-
-                toolStripLabelImageSize.Text = sourceImage.Width + " × " + sourceImage.Height;
-
-                if (IsARLocked && sourceImage != null)
-                {
-                    ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / sourceImage.Width * sourceImage.Height, 0));
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error loading image: " + ex.Message,
-                    "Error Loading Image", MessageBoxButtons.OK,
-                    MessageBoxIcon.Error);
-                toolStripLabelImageSize.Text = "Invalid Image.";
-            }
-        }
-
-        private void GeneratePattern()
-        {
-            if (sourceImage == null)
-                return;
-
-            // TODO
-            var angle = float.Parse(toolStripTextBoxRotation.Text);
-
-            template = kaleidoscopeTemplateExtractor.Extract(sourceImage, imageScaledWidth,
-                imageScaledHeight, PatternSize, PatternXOffset, PatternYOffset, PatternRotation, pictureBox1);
-
-            previewWindow.PictureBox.Image = template.Bitmap;
-
-            ActivatePreviewWindowAtBottomRight();
+            Controller.SetTemplateExtractionParameters(patternSize, patternXOffset, patternYOffset, PatternRotation);
+            Controller.UpdateClippingPathOnTemplateFinder();
         }
 
         private void openFileDialog1_FileOk(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            imgFileName = openFileDialog1.FileName;
-            LoadImage(imgFileName);
-
-            var MAX_LEN = 32;
-            var fileFullPath = openFileDialog1.FileName;
-
-            toolStripLabelSourceImage.Text = TrimFilePath(fileFullPath, MAX_LEN);
-            toolStripLabelSourceImage.ToolTipText = fileFullPath;
-
-            GeneratePattern();
+            Controller.LoadSourceImage(openFileDialog1.FileName);
+            if (Model.SourceImage == null)
+                return;
+            if (IsARLocked)
+                Controller.ScaleSourceImageByWidth(ImageScaledWidth);
+            else
+                Controller.ScaleSourceImage(ImageScaledWidth, ImageScaledHeight);
         }
 
         private string TrimFilePath(string fileFullPath, int maxLength)
@@ -344,7 +340,7 @@ namespace Kvh.Kaleidoscope
             }
 
             isUpdating = true;
-            GeneratePattern();
+            UpdateExtractionParametersToModel();
             previousUpdateLocation = e.Location;
             GC.Collect();
             isUpdating = false;
@@ -352,7 +348,7 @@ namespace Kvh.Kaleidoscope
 
         private void toolStripButton2_Click(object sender, EventArgs e)
         {
-            GeneratePattern();
+            UpdateExtractionParametersToModel();
             Render();
         }
 
@@ -376,12 +372,12 @@ namespace Kvh.Kaleidoscope
                  MIN_IMG_SIZE, MAX_IMG_SIZE,
                  "Width", ref imageScaledWidth, toolStrip2))
                 e.Cancel = true;
-            else if (IsARLocked && sourceImage != null)
+            else if (IsARLocked && Model.SourceImage != null)
             {
                 if (previousValue != imageScaledWidth)
                 {
-                    ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / sourceImage.Width * sourceImage.Height, 0));
-                    GeneratePattern();
+                    ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / Model.SourceImage.Width * Model.SourceImage.Height, 0));
+                    UpdateExtractionParametersToModel();
                 }
             }
         }
@@ -393,12 +389,12 @@ namespace Kvh.Kaleidoscope
                 MIN_IMG_SIZE, MAX_IMG_SIZE,
                 "Height", ref imageScaledHeight, toolStrip2))
                 e.Cancel = true;
-            else if (IsARLocked && sourceImage != null)
+            else if (IsARLocked && Model.SourceImage != null)
             {
                 if (previousValue != imageScaledHeight)
                 {
-                    ImageScaledWidth = (int)(Math.Round((float)ImageScaledHeight / sourceImage.Height * sourceImage.Width, 0));
-                    GeneratePattern();
+                    ImageScaledWidth = (int)(Math.Round((float)ImageScaledHeight / Model.SourceImage.Height * Model.SourceImage.Width, 0));
+                    UpdateExtractionParametersToModel();
                 }
             }
         }
@@ -411,7 +407,7 @@ namespace Kvh.Kaleidoscope
                 "Size", ref patternSize, toolStrip4))
                 e.Cancel = true;
             else if (previousValue != patternSize)
-                GeneratePattern();
+                UpdateExtractionParametersToModel();
         }
 
         private void toolStripTextBox2_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -422,7 +418,7 @@ namespace Kvh.Kaleidoscope
                 "X Offset", ref patternXOffset, toolStrip4))
                 e.Cancel = true;
             else if (previousValue != patternXOffset)
-                GeneratePattern();
+                UpdateExtractionParametersToModel();
         }
 
         private void toolStripTextBox5_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -433,7 +429,7 @@ namespace Kvh.Kaleidoscope
                 "Y Offset", ref patternYOffset, toolStrip4))
                 e.Cancel = true;
             else if (previousValue != patternYOffset)
-                GeneratePattern();
+                UpdateExtractionParametersToModel();
         }
 
         private void toolStripTextBox6_Validating(object sender, System.ComponentModel.CancelEventArgs e)
@@ -474,7 +470,7 @@ namespace Kvh.Kaleidoscope
             PatternYOffset = random.Next(0, ImageScaledHeight - PatternSize);
             PatternRotation = random.Next(0, 300) / 10f;
 
-            GeneratePattern();
+            UpdateExtractionParametersToModel();
             Render();
         }
 
@@ -667,6 +663,51 @@ namespace Kvh.Kaleidoscope
             if (!renderWindow.Visible)
                 renderWindow.Show();
             previewWindow.Opacity = 0.25;
+        }
+
+        internal void UpdateSourceImageInfo()
+        {
+            toolStripLabelSourceImage.Text = TrimFilePath(Model.SourceImageFullPath, 32);
+            toolStripLabelSourceImage.ToolTipText = Model.SourceImageFullPath;
+        }
+
+        internal void UpdateScaledImage()
+        {
+            pictureBox1.Image = Model.ScaledImage;
+        }
+
+        internal void UpdateTemplateExtractionParameters()
+        {
+            //throw new NotImplementedException();
+        }
+
+        internal void UpdateExtractedTemplate()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void UpdateRenderedImage()
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void DisplayError(string v, Exception ex)
+        {
+            throw new NotImplementedException();
+        }
+
+        internal void UpdateSavedImageInfo()
+        {
+            toolStripStatusLabel1.Text = "Image has been saved to " +
+                TrimFilePath(Model.RenderedImageFullPath, 64) + ".";
+            toolStripStatusLabel1.Tag = Model.RenderedImageFullPath;
+            toolStripStatusLabel1.IsLink = true;
+            toolStripStatusLabel1.LinkVisited = false;
+        }
+
+        internal void UpdateTemplateFinder(Bitmap templateFinderBitmap)
+        {
+            pictureBox1.Image = templateFinderBitmap;
         }
     }
 }
