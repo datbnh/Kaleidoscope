@@ -63,5 +63,22 @@ namespace Kvh.Kaleidoscope
             openFileDialog.Filter = ImageFileExtFilters + AllImageFileExtFilter;
             openFileDialog.FilterIndex = 7;
         }
+
+        public static string TrimFilePath(this string path, int maxLength)
+        {
+            var fileName = Path.GetFileName(path);
+            if (path.Length > maxLength)
+            {
+                if (fileName.Length > maxLength)
+                    return "..." + path.Substring(path.Length - maxLength);
+                else
+                {
+                    var len = maxLength - fileName.Length;
+                    return path.Substring(0, len) + "...\\" + fileName;
+                }
+            }
+            else
+                return path;
+        }
     }
 }

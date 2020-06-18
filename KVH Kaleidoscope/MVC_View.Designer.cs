@@ -33,9 +33,9 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel2 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel3 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelRenderingWidth = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel4 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripStatusLabel5 = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStripStatusLabelRenderingHeight = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
@@ -103,9 +103,9 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel2,
-            this.toolStripStatusLabel3,
+            this.toolStripStatusLabelRenderingWidth,
             this.toolStripStatusLabel4,
-            this.toolStripStatusLabel5,
+            this.toolStripStatusLabelRenderingHeight,
             this.toolStripStatusLabel1});
             this.statusStrip1.Location = new System.Drawing.Point(0, 0);
             this.statusStrip1.Name = "statusStrip1";
@@ -123,13 +123,13 @@
             // 
             // toolStripStatusLabel3
             // 
-            this.toolStripStatusLabel3.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            this.toolStripStatusLabelRenderingWidth.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabel3.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
-            this.toolStripStatusLabel3.Name = "toolStripStatusLabel3";
-            this.toolStripStatusLabel3.Size = new System.Drawing.Size(33, 29);
-            this.toolStripStatusLabel3.Text = "W";
+            this.toolStripStatusLabelRenderingWidth.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
+            this.toolStripStatusLabelRenderingWidth.Name = "toolStripStatusLabel3";
+            this.toolStripStatusLabelRenderingWidth.Size = new System.Drawing.Size(33, 29);
+            this.toolStripStatusLabelRenderingWidth.Text = "W";
             // 
             // toolStripStatusLabel4
             // 
@@ -139,13 +139,13 @@
             // 
             // toolStripStatusLabel5
             // 
-            this.toolStripStatusLabel5.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
+            this.toolStripStatusLabelRenderingHeight.BorderSides = ((System.Windows.Forms.ToolStripStatusLabelBorderSides)((((System.Windows.Forms.ToolStripStatusLabelBorderSides.Left | System.Windows.Forms.ToolStripStatusLabelBorderSides.Top) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Right) 
             | System.Windows.Forms.ToolStripStatusLabelBorderSides.Bottom)));
-            this.toolStripStatusLabel5.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
-            this.toolStripStatusLabel5.Name = "toolStripStatusLabel5";
-            this.toolStripStatusLabel5.Size = new System.Drawing.Size(29, 29);
-            this.toolStripStatusLabel5.Text = "H";
+            this.toolStripStatusLabelRenderingHeight.BorderStyle = System.Windows.Forms.Border3DStyle.Sunken;
+            this.toolStripStatusLabelRenderingHeight.Name = "toolStripStatusLabel5";
+            this.toolStripStatusLabelRenderingHeight.Size = new System.Drawing.Size(29, 29);
+            this.toolStripStatusLabelRenderingHeight.Text = "H";
             // 
             // toolStripStatusLabel1
             // 
@@ -245,7 +245,7 @@
             this.toolStripButtonSourceImage.Size = new System.Drawing.Size(137, 29);
             this.toolStripButtonSourceImage.Text = "Source Image:";
             this.toolStripButtonSourceImage.ToolTipText = "Click to Open...";
-            this.toolStripButtonSourceImage.Click += new System.EventHandler(this.toolStripLabel10_Click);
+            this.toolStripButtonSourceImage.Click += new System.EventHandler(this.toolStripLabelSourceImage_Click);
             // 
             // toolStripLabelSourceImage
             // 
@@ -448,7 +448,7 @@
             this.toolStripButtonPreviewTemplate.Name = "toolStripButtonPreviewTemplate";
             this.toolStripButtonPreviewTemplate.Size = new System.Drawing.Size(152, 29);
             this.toolStripButtonPreviewTemplate.Text = "Preview Template";
-            this.toolStripButtonPreviewTemplate.Click += new System.EventHandler(this.toolStripButton1_Click_1);
+            this.toolStripButtonPreviewTemplate.Click += new System.EventHandler(this.toolStripButtonShowPreviewWindow_Click);
             // 
             // toolStripSeparator6
             // 
@@ -463,7 +463,7 @@
             this.toolStripButtonRandomise.Name = "toolStripButtonRandomise";
             this.toolStripButtonRandomise.Size = new System.Drawing.Size(105, 29);
             this.toolStripButtonRandomise.Text = "Randomise";
-            this.toolStripButtonRandomise.Click += new System.EventHandler(this.toolStripButton4_Click);
+            this.toolStripButtonRandomise.Click += new System.EventHandler(this.toolStripButtonRandomize_Click);
             // 
             // toolStrip3
             // 
@@ -495,7 +495,7 @@
             this.toolStripButtonRender.Name = "toolStripButtonRender";
             this.toolStripButtonRender.Size = new System.Drawing.Size(86, 34);
             this.toolStripButtonRender.Text = "Render";
-            this.toolStripButtonRender.Click += new System.EventHandler(this.toolStripButton2_Click);
+            this.toolStripButtonRender.Click += new System.EventHandler(this.toolStripButtonRender_Click);
             // 
             // toolStripSeparator8
             // 
@@ -539,7 +539,7 @@
             this.toolStripButton5.Name = "toolStripButton5";
             this.toolStripButton5.Size = new System.Drawing.Size(253, 34);
             this.toolStripButton5.Text = "Save Rendered Image to File...";
-            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
+            this.toolStripButton5.Click += new System.EventHandler(this.toolStripButtonSaveRenderedImage_Click);
             // 
             // errorProvider1
             // 
@@ -593,9 +593,9 @@
         private System.Windows.Forms.StatusStrip statusStrip1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel2;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel3;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRenderingWidth;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel4;
-        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel5;
+        private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabelRenderingHeight;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolTip toolTip1;
         private System.Windows.Forms.ToolStripContainer toolStripContainer1;

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Configuration;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms.VisualStyles;
 
 namespace Kvh.Kaleidoscope
 {
@@ -19,10 +20,19 @@ namespace Kvh.Kaleidoscope
         {
             this.view = view;
             this.model = model;
+
             this.view.Controller = this;
             this.view.Model = this.model;
+
             //TODO
-            SetKaleidoscope(new KaleidoscopeEquilateralTriangle());
+            model.GraphicsInterpolationMode = InterpolationMode.HighQualityBicubic;
+            model.GraphicsPixelOffsetMode = PixelOffsetMode.HighQuality;
+            model.GraphicsSmoothingMode = SmoothingMode.AntiAlias;
+            SetKaleidoscope(new KaleidoscopeEquilateralTriangle() {
+                InterpolationMode = model.GraphicsInterpolationMode,
+                PixelOffsetMode = model.GraphicsPixelOffsetMode,
+                SmoothingMode = model.GraphicsSmoothingMode,
+            } );
         }
 
         public void SetKaleidoscope(IKaleidoscope kaleidoscope)
@@ -31,10 +41,36 @@ namespace Kvh.Kaleidoscope
         }
 
 
-        public void LoadSourceImage(string sourceImageFullPath)
+        public void LoadSourceImage(string imgPath)
         {
-            LoadImage(sourceImageFullPath);
-            view.UpdateSourceImageInfo();
+            try
+            {
+                var tmp = new Bitmap(imgPath);
+                model.SourceImage = tmp.Clone() as Bitmap;
+                tmp.Dispose();
+                model.SourceImageFullPath = imgPath;
+                view.UpdateSourceImageInfo();
+            }
+            catch (Exception ex)
+            {
+                view.DisplayError("Error Loading Image", ex);
+            }
+        }
+
+        public void UpdateTemplateExtractionParametersFromViewToModel()
+        {
+            model.TemplateExtractionSize = view.PatternSize;
+            model.TemplateExtractionOffsetX = view.PatternXOffset;
+            model.TemplateExtractionOffsetY = view.PatternYOffset;
+            model.TemplateExtractionRotaion = view.PatternRotation;
+        }
+
+        public void UpdateTemplateExtractionParameterFromModelToView()
+        {
+            view.PatternSize = model.TemplateExtractionSize;
+            view.PatternXOffset = model.TemplateExtractionOffsetX;
+            view.PatternYOffset = model.TemplateExtractionOffsetY;
+            view.PatternRotation = model.TemplateExtractionRotaion;
         }
 
         public void ScaleSourceImage(int targetWidth, int targetHeight)
@@ -46,23 +82,28 @@ namespace Kvh.Kaleidoscope
         public void UpdateClippingPathOnTemplateFinder()
         {
             // use a temp bitmap to avoid flickering
+            Console.WriteLine("Scaled Image: " + model.ScaledImage.PhysicalDimension + model.ScaledImage.HorizontalResolution);
             var templateFinderBitmap = model.ScaledImage.Clone() as Bitmap;
-            var gTemplateFinderBitmap = Graphics.FromImage(templateFinderBitmap);
-            //gTemplateFinderBitmap.SmoothingMode = model.Kaleidoscope.SmoothingMode;
-            //gTemplateFinderBitmap.PixelOffsetMode = model.Kaleidoscope.PixelOffsetMode;
-            //gTemplateFinderBitmap.InterpolationMode = model.Kaleidoscope.InterpolationMode;
-
-            //gTemplateFinderBitmap.DrawImage(originalImage, scaledImgRect, imgRect, GraphicsUnit.Pixel);
-            gTemplateFinderBitmap.TranslateTransform(
-                model.TemplateExtractionOffsetX, 
-                model.TemplateExtractionOffsetY);
-            gTemplateFinderBitmap.RotateTransform(
-                model.TemplateExtractionRotaion);
             var clippingPath = model.Kaleidoscope.GetUntransformedTemplateClippingPath(
                 model.TemplateExtractionSize);
-            gTemplateFinderBitmap.DrawPath(new Pen(Brushes.DimGray), clippingPath);
-            gTemplateFinderBitmap.DrawPath(new Pen(Brushes.White) { DashPattern = new float[] { 4, 2 } }, clippingPath);
-            gTemplateFinderBitmap.Dispose();
+            var graphics = Graphics.FromImage(templateFinderBitmap);
+            
+            graphics.SmoothingMode = model.GraphicsSmoothingMode;
+            graphics.PixelOffsetMode = model.GraphicsPixelOffsetMode;
+            graphics.InterpolationMode = model.GraphicsInterpolationMode;
+
+            graphics.TranslateTransform(
+                model.TemplateExtractionOffsetX,
+                model.TemplateExtractionOffsetY);
+            graphics.RotateTransform(
+                model.TemplateExtractionRotaion);
+            graphics.DrawPath(
+                new Pen(Brushes.DimGray),
+                clippingPath);
+            graphics.DrawPath(
+                new Pen(Brushes.White) { DashPattern = new float[] { 4, 2 } },
+                clippingPath);
+            graphics.Dispose();
 
             view.UpdateTemplateFinder(templateFinderBitmap);
         }
@@ -79,15 +120,6 @@ namespace Kvh.Kaleidoscope
             ScaleSourceImage(targetWidth, targetHeight);
         }
 
-        public void SetTemplateExtractionParameters(int size, int offsetX, int offsetY, float angle)
-        {
-            model.TemplateExtractionSize = size;
-            model.TemplateExtractionOffsetX = offsetX;
-            model.TemplateExtractionOffsetY = offsetY;
-            model.TemplateExtractionRotaion = angle;
-            //view.UpdateTemplateExtractionParameters();
-        }
-
         public void ExtractTemplate()
         {
             model.Template = model.Kaleidoscope.ExtractTemplate(
@@ -97,44 +129,24 @@ namespace Kvh.Kaleidoscope
                 model.TemplateExtractionOffsetY,
                 model.TemplateExtractionRotaion
                 );
-            view.UpdateExtractedTemplate();
+            view.UpdateTemplatePreviewWindow();
         }
 
         public void RenderKaleidoscopeImage(int renderingWidth, int renderingHeight)
         {
-            model.RenderedImageWidth = renderingWidth;
-            model.RenderedImageHeight = renderingHeight;
+            model.RenderingWidth = renderingWidth;
+            model.RenderingHeight = renderingHeight;
             model.RectangularPattern = model.Kaleidoscope.
                 GetTileableRectangularPattern(model.Template);
             model.RenderedImage = GraphicsExtensions.CentreAlignedTile(
                 model.RectangularPattern,
-                model.RenderedImageWidth,
-                model.RenderedImageHeight);
+                model.RenderingWidth,
+                model.RenderingHeight);
             view.UpdateRenderedImage();
-        }
-
-
-        private void LoadImage(string imgPath)
-        {
-            try
-            {
-                model.SourceImageFullPath = imgPath;
-                var tmp = new Bitmap(model.SourceImageFullPath);
-                model.SourceImage = tmp.Clone() as Bitmap;
-                tmp.Dispose();
-                view.UpdateSourceImageInfo();
-            }
-            catch (Exception ex)
-            {
-                view.DisplayError("Error Loading Image", ex);
-            }
         }
 
         public void SaveRenderedImage(string imgPath)
         {
-            if (model.RenderedImage == null)
-                return;
-
             try
             {
                 model.RenderedImageFullPath = imgPath;
