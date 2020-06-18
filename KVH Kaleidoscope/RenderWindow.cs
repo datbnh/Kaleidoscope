@@ -12,6 +12,16 @@ namespace Kvh.Kaleidoscope
 
         public PictureBox PictureBox { get => pictureBox1; }
 
+        public override bool AutoSize
+        {
+            get => base.AutoSize;
+            set
+            {
+                base.AutoSize = value;
+                panel1.AutoSize = value;
+            }
+        }
+
         private void RenderWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (e.CloseReason == CloseReason.UserClosing)
