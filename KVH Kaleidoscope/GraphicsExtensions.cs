@@ -68,10 +68,9 @@ namespace Kvh.Kaleidoscope
             {
                 for (int j = 0; j < nTotalCols; j++)
                 {
-                    var x = j * image.Width + initOffsetX;
-                    var y = i * image.Height + initOffsetY;
+                    var x = j * (image.Width) + initOffsetX;
+                    var y = i * (image.Height) + initOffsetY;
                     g.DrawImage(image, new PointF(x, y));
-                    Console.WriteLine("> " + x + " " + y);
                 }
             }
 
