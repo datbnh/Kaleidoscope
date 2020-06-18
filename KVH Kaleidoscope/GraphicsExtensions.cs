@@ -50,6 +50,7 @@ namespace Kvh.Kaleidoscope
         public static Bitmap CentreAlignedTile(Bitmap image, int width, int height)
         {
             Bitmap bitmap = new Bitmap(width, height);
+            bitmap.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 
             var nTotalCols = (int)Math.Round((float)width / image.Width + 0.5f, 0);
             var nTotalRows = (int)Math.Round((float)height / image.Height + 0.5f, 0);

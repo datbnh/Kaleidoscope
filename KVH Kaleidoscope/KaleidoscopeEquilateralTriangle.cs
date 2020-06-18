@@ -20,12 +20,14 @@ namespace Kvh.Kaleidoscope
         private readonly float[] RotationAngles = { -60, 0, 60, -120, 180, 120, -60, -120, 180, 120, -60, 0, 60, -120 };
         private readonly int[] PatternIndices = { 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0 };
 
-        public Bitmap ExtractTemplate(Bitmap originalImage, int size, int x, int y, float angle)
+        public Bitmap ExtractTemplate(Bitmap image, int size, int x, int y, float angle)
         {
+            Console.WriteLine("Extracting template from image: " + image.PhysicalDimension + image.HorizontalResolution);
             var pSize = GetUntransformedTemplateRectangularSize(size);
             var clippingPath = GetUntransformedTemplateClippingPath(size);
 
             Bitmap template = new Bitmap((int)Math.Round(pSize.X), (int)Math.Round(pSize.Y, 0));
+            template.SetResolution(image.HorizontalResolution, image.VerticalResolution);
             var gTemplate = Graphics.FromImage(template);
             gTemplate.SmoothingMode = SmoothingMode;
             gTemplate.PixelOffsetMode = PixelOffsetMode;
@@ -35,7 +37,7 @@ namespace Kvh.Kaleidoscope
 
             gTemplate.RotateTransform(-angle);
             gTemplate.TranslateTransform(-x, -y);
-            gTemplate.DrawImage(originalImage, new PointF(0, 0));
+            gTemplate.DrawImage(image, new PointF(0, 0));
             gTemplate.Dispose();
 
             return template;
@@ -45,6 +47,7 @@ namespace Kvh.Kaleidoscope
         {
             var floatSize = GetUntransformedTemplateRectangularSize(template.Width);
             Bitmap bitmap = new Bitmap(template.Width * 3, template.Height * 2);
+            bitmap.SetResolution(template.HorizontalResolution, template.VerticalResolution);
             var flippedXTemplate = template.Clone() as Bitmap;
             flippedXTemplate.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
