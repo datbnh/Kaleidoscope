@@ -22,7 +22,6 @@ namespace Kvh.Kaleidoscope
 
         public Bitmap ExtractTemplate(Bitmap image, int size, int x, int y, float angle)
         {
-            Console.WriteLine("Extracting template from image: " + image.PhysicalDimension + image.HorizontalResolution);
             var pSize = GetUntransformedTemplateRectangularSize(size);
             var clippingPath = GetUntransformedTemplateClippingPath(size);
 

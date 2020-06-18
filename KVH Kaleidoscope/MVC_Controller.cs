@@ -82,7 +82,6 @@ namespace Kvh.Kaleidoscope
         public void UpdateClippingPathOnTemplateFinder()
         {
             // use a temp bitmap to avoid flickering
-            Console.WriteLine("Scaled Image: " + model.ScaledImage.PhysicalDimension + model.ScaledImage.HorizontalResolution);
             var templateFinderBitmap = model.ScaledImage.Clone() as Bitmap;
             var clippingPath = model.Kaleidoscope.GetUntransformedTemplateClippingPath(
                 model.TemplateExtractionSize);
