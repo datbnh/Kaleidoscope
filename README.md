@@ -15,36 +15,52 @@ This is not an optimal solution in terms of performance, as the _tilable rectang
 
 The transformation (e.g. rotations and translations) set of each kaleidoscope used in the implementation of the current version is documented in the "magic table" below.
 
-_Notes:_
+_Notes:_ these conventions will be used in the following tables:
 * X-Translation Distance = X-Offset Factor × Template Width _w_
 * Y-Translation Distance = Y-Offset Factor × Template Height _h_ 
+* Template Index: 0 = original template, 1 = mirrored template
 
 ### Equilateral triangle kaleidoscopes
 ***Template and flipped template*** (as seeds for the tilable pattern) ***:***
-
-![Template Definition](https://github.com/datbnh/Kaleidoscope/blob/master/Doc/images/Template%20Definition.svg?raw=true)
+![Template Definition](https://github.com/datbnh/Kaleidoscope/blob/master/Doc/images/TemplateDefinition_60-60-60.svg?raw=true)
 
 ***Tilable pattern:***
-|**Location**                  |  ⑦  |  ⑧  |  ⑨  |  ⑩  |  ⑪  |  ⑫  |  ⑬  |
-|:-----------------------------|----:|----:|----:|----:|----:|----:|----:|
-|**X-Offset Factor**           |0    |1    |1.5  |1    |1.5  |2.5  |3    |
-|**Y-Offset Factor**           |1    |1    |0    |1    |0    |0    |1    |
-|**Rotation**                  |-120°|180° |120° |-60° |0°   |60°  |-120°|
-|**Template Index**<sup>†</sup>|0    |1    |0    |1    |0    |1    |0    |
+![Tilable Pattern](https://github.com/datbnh/Kaleidoscope/blob/master/Doc/images/TilablePattern_60-60-60.svg?raw=true)
 
-<sup>†</sup>: _0: normal template, 1: flipped template_
-![Tilable Pattern](https://github.com/datbnh/Kaleidoscope/blob/master/Doc/images/Tilable%20Rectangular%20Pattern.svg?raw=true)
-|**Location**                  | ⓪   |  ①  |  ②  |  ③  |  ④  |  ⑤  |  ⑥  |
-|:-----------------------------|----:|----:|----:|----:|----:|----:|----:|
-|**X-Offset Factor**           |-0.5 |0    |1    |1.5  |2.5  |3    |3    |
-|**Y-Offset Factor**           |2    |1    |1    |2    |2    |1    |2    |
-|**Rotation**                  |-60° |0°   |60°  |-120°|180° |120° |-60° |
-|**Template Index**<sup>†</sup>|1    |0    |1    |0    |1    |0    |1    |
+|**Location**        |  ⑦  |  ⑧  |  ⑨  |  ⑩  |  ⑪  |  ⑫  |  ⑬  |
+|:-------------------|----:|----:|----:|----:|----:|----:|----:|
+|**X-Offset Factor** |0    |1    |1.5  |1    |1.5  |2.5  |3    |
+|**Y-Offset Factor** |1    |1    |0    |1    |0    |0    |1    |
+|**Rotation**        |-120°|180° |120° |-60° |0°   |60°  |-120°|
+|**Template Index**  |0    |1    |0    |1    |0    |1    |0    |
 
-<sup>†</sup>: _0: normal template, 1: flipped template_
+|**Location**        | ⓪   |  ①  |  ②  |  ③  |  ④  |  ⑤  |  ⑥  |
+|:-------------------|----:|----:|----:|----:|----:|----:|----:|
+|**X-Offset Factor** |-0.5 |0    |1    |1.5  |2.5  |3    |3    |
+|**Y-Offset Factor** |2    |1    |1    |2    |2    |1    |2    |
+|**Rotation**        |-60° |0°   |60°  |-120°|180° |120° |-60° |
+|**Template Index**  |1    |0    |1    |0    |1    |0    |1    |
 
 ### 30°–60°–90° triangle kaleidoscopes
-(TBA)
+***Template and flipped template*** (as seeds for the tilable pattern) ***:***
+![Template Definition](https://github.com/datbnh/Kaleidoscope/blob/master/Doc/images/TemplateDefinition_30-60-90.svg?raw=true)
+
+***Tilable pattern:***
+![Tilable Pattern](https://github.com/datbnh/Kaleidoscope/blob/master/Doc/images/TilablePattern_30-60-90.svg?raw=true)
+
+|**Location**                  | ⓪   |  ①  |  ②  |  ③  |  ④  |  ⑤  |  ⑥  |  ⑦  |  ⑧  |  ⑨  |  ⑩  |  ⑪  |
+|:-----------------------------|----:|----:|----:|----:|----:|----:|----:|----:|----:|----:|----:|----:|
+|**X-Offset Factor**           |     |     |     |     |     |     |     |     |     |     |     |     |
+|**Y-Offset Factor**           |     |     |     |     |     |     |     |     |     |     |     |     |
+|**Rotation**                  |     |     |     |     |     |     |     |     |     |     |     |     |
+|**Template Index**<sup>†</sup>|     |     |     |     |     |     |     |     |     |     |     |     |
+
+|**Location**                  | ⓿   |  ❶  |  ❷  |  ❸  |  ❹  |  ❺  |  ❻  |  ❼  |  ❽  |  ❾  |  ❿  |  ⓫  |
+|:-----------------------------|----:|----:|----:|----:|----:|----:|----:|----:|----:|----:|----:|----:|
+|**X-Offset Factor**           |     |     |     |     |     |     |     |     |     |     |     |     |
+|**Y-Offset Factor**           |     |     |     |     |     |     |     |     |     |     |     |     |
+|**Rotation**                  |     |     |     |     |     |     |     |     |     |     |     |     |
+|**Template Index**<sup>†</sup>|     |     |     |     |     |     |     |     |     |     |     |     |
 
 ### 45°–45°–90° triangle kaleidoscopes
 (TBA)
