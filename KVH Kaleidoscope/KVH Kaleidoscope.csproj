@@ -73,6 +73,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Helpers.cs" />
+    <Compile Include="Kaleidoscope306090Triangle.cs" />
     <Compile Include="MVC_View.cs">
       <SubType>Form</SubType>
     </Compile>

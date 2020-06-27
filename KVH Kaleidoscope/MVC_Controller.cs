@@ -28,7 +28,7 @@ namespace Kvh.Kaleidoscope
             model.GraphicsInterpolationMode = InterpolationMode.HighQualityBicubic;
             model.GraphicsPixelOffsetMode = PixelOffsetMode.HighQuality;
             model.GraphicsSmoothingMode = SmoothingMode.AntiAlias;
-            SetKaleidoscope(new KaleidoscopeEquilateralTriangle() {
+            SetKaleidoscope(new Kaleidoscope306090Triangle() {
                 InterpolationMode = model.GraphicsInterpolationMode,
                 PixelOffsetMode = model.GraphicsPixelOffsetMode,
                 SmoothingMode = model.GraphicsSmoothingMode,
