@@ -19,9 +19,9 @@ namespace Kvh.Kaleidoscope
         private static readonly string _d_softwareInfo = $"{_b_assemblyName} {_a_version} by Đạt Bùi\r\n(Built {_c_buildDate})";
 
         private readonly int MAX_IMG_SIZE = 4096;
-        private readonly int MAX_PATTERN_SIZE = 450;
+        private readonly int MAX_TEMPLATE_SIZE = 450;
         private readonly int MIN_IMG_SIZE = 100;
-        private readonly int MIN_PATTERN_SIZE = 100;
+        private readonly int MIN_TEMPLATE_SIZE = 5;
         private readonly RenderWindow previewWindow = new RenderWindow()
         {
             Text = "Preview - KVH",
@@ -30,33 +30,40 @@ namespace Kvh.Kaleidoscope
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
         };
 
-        internal void UpdateMirrorSystem()
-        {
-            if (Model.MirrorSystem is MirrorSystem606060)
-                toolStripDropDownButton1.Text = "60-60-60 Triangle";
-            else if (Model.MirrorSystem is MirrorSystem306090)
-                toolStripDropDownButton1.Text = "30-60-90 Triangle";
-            else
-                toolStripDropDownButton1.Text = "Unknown Mirror System";
-        }
-
         private readonly RenderWindow renderWindow = new RenderWindow();
-        private Point clickedLocation;
+
+        private Point eventHandling_clickedLocation;
+
+        private Point eventHandling_lastCursorPosition;
+
+        private float eventHandling_previousTemplateRotation;
+
+        private int eventHandling_previousTemplateSize = 100;
+
+        private int eventHandling_previousTemplateXOffset;
+
+        private int eventHandling_previousTemplateYOffset;
+
+        private Point eventHandling_previousUpdateLocation;
+
         private int imageScaledHeight;
+
         private int imageScaledWidth;
+
         private bool isPictureBoxLMouseDown = false;
+
         private bool isPictureBoxRMouseDown = false;
+
         private bool isUpdating = false;
-        private Point lastCursorPosition;
-        private float patternRotation;
-        private int patternSize;
-        private int patternXOffset;
-        private int patternYOffset;
-        private int previousClipPathOffsetX;
-        private int previousClipPathOffsetY;
-        private float previousClipPathRotation;
-        private int previousPatternSize = 250;
-        private Point previousUpdateLocation;
+
+        private float templateRotation;
+
+        private int templateSize;
+
+        private int templateXOffset;
+
+        private int templateYOffset;
+
         public MVC_View()
         {
             InitializeGlobalMouseHandler();
@@ -79,28 +86,28 @@ namespace Kvh.Kaleidoscope
             set { imageScaledWidth = value; toolStripTextBoxScaledWidth.Text = value.ToString(); }
         }
 
-        public float PatternRotation
+        public float TemplateRotation
         {
-            get => patternRotation;
-            set { patternRotation = value; toolStripTextBoxRotation.Text = value.ToString(); }
+            get => templateRotation;
+            set { templateRotation = value; toolStripTextBoxRotation.Text = value.ToString(); }
         }
 
-        public int PatternSize
+        public int TemplateSize
         {
-            get => patternSize;
-            set { patternSize = value; toolStripTextBoxClippingSize.Text = value.ToString(); }
+            get => templateSize;
+            set { templateSize = value; toolStripTextBoxClippingSize.Text = value.ToString(); }
         }
 
-        public int PatternXOffset
+        public int TemplateXOffset
         {
-            get => patternXOffset;
-            set { patternXOffset = value; toolStripTextBoxXOffset.Text = value.ToString(); }
+            get => templateXOffset;
+            set { templateXOffset = value; toolStripTextBoxXOffset.Text = value.ToString(); }
         }
 
-        public int PatternYOffset
+        public int TemplateYOffset
         {
-            get => patternYOffset;
-            set { patternYOffset = value; toolStripTextBoxYOffset.Text = value.ToString(); }
+            get => templateYOffset;
+            set { templateYOffset = value; toolStripTextBoxYOffset.Text = value.ToString(); }
         }
 
         private bool IsARLocked { get => toolStripButtonLockAR.Checked; set => toolStripButtonLockAR.Checked = value; }
@@ -112,6 +119,17 @@ namespace Kvh.Kaleidoscope
             toolStripStatusLabel1.Text = errorMessage;
         }
 
+        internal void UpdateMirrorSystem()
+        {
+            if (Model.MirrorSystem is MirrorSystem606060)
+                toolStripDropDownButton1.Text = "60-60-60 Triangle";
+            else if (Model.MirrorSystem is MirrorSystem306090)
+                toolStripDropDownButton1.Text = "30-60-90 Triangle";
+            else if (Model.MirrorSystem is MirrorSystem459045)
+                toolStripDropDownButton1.Text = "45-90-45 Triangle";
+            else
+                toolStripDropDownButton1.Text = "Unknown Mirror System";
+        }
         internal void UpdateRenderedImage()
         {
             renderWindow.PictureBox.Image = Model.RenderedImage;
@@ -177,10 +195,10 @@ namespace Kvh.Kaleidoscope
 
         private void Form1_Shown(object sender, EventArgs e)
         {
-            PatternSize = 250;
-            PatternXOffset = 0;
-            PatternYOffset = 0;
-            PatternRotation = 0f;
+            TemplateSize = 250;
+            TemplateXOffset = 0;
+            TemplateYOffset = 0;
+            TemplateRotation = 0f;
             ImageScaledWidth = 400;
             ImageScaledHeight = 300;
 
@@ -197,11 +215,11 @@ namespace Kvh.Kaleidoscope
         {
             Point cursorPosition = Cursor.Position;
             var dis = Math.Sqrt(
-                Math.Pow(cursorPosition.X - lastCursorPosition.X, 2) +
-                Math.Pow(cursorPosition.Y - lastCursorPosition.Y, 2));
+                Math.Pow(cursorPosition.X - eventHandling_lastCursorPosition.X, 2) +
+                Math.Pow(cursorPosition.Y - eventHandling_lastCursorPosition.Y, 2));
             //Debug(cursorPosition + " -> Distance = " + dis);
 
-            lastCursorPosition = cursorPosition;
+            eventHandling_lastCursorPosition = cursorPosition;
 
             if (dis < 5)
                 return;
@@ -266,13 +284,13 @@ namespace Kvh.Kaleidoscope
 
             if (isPictureBoxLMouseDown && isPictureBoxRMouseDown)
             {
-                previousPatternSize = PatternSize;
+                eventHandling_previousTemplateSize = TemplateSize;
             }
 
-            clickedLocation = e.Location;
-            previousClipPathOffsetX = PatternXOffset;
-            previousClipPathOffsetY = PatternYOffset;
-            previousClipPathRotation = PatternRotation;
+            eventHandling_clickedLocation = e.Location;
+            eventHandling_previousTemplateXOffset = TemplateXOffset;
+            eventHandling_previousTemplateYOffset = TemplateYOffset;
+            eventHandling_previousTemplateRotation = TemplateRotation;
         }
 
         private void pictureBox1_MouseLeave(object sender, EventArgs e)
@@ -286,8 +304,8 @@ namespace Kvh.Kaleidoscope
             if (!isPictureBoxLMouseDown && !isPictureBoxRMouseDown)
                 return;
 
-            if (previousUpdateLocation != null)
-                if (e.Location == previousUpdateLocation)
+            if (eventHandling_previousUpdateLocation != null)
+                if (e.Location == eventHandling_previousUpdateLocation)
                     return;
 
             if (isUpdating)
@@ -296,8 +314,8 @@ namespace Kvh.Kaleidoscope
                 return;
             }
 
-            var dX = e.X - clickedLocation.X;
-            var dY = e.Y - clickedLocation.Y;
+            var dX = e.X - eventHandling_clickedLocation.X;
+            var dY = e.Y - eventHandling_clickedLocation.Y;
 
             if (isPictureBoxLMouseDown && isPictureBoxRMouseDown)
             {
@@ -318,35 +336,35 @@ namespace Kvh.Kaleidoscope
             if (previewWindow.Visible)
                 Controller.ExtractTemplate();
 
-            previousUpdateLocation = e.Location;
+            eventHandling_previousUpdateLocation = e.Location;
             GC.Collect();
             isUpdating = false;
 
             void MoveTemplateClippingArea(int _dX)
             {
-                if (previousPatternSize + _dX > MAX_PATTERN_SIZE)
-                    PatternSize = MAX_PATTERN_SIZE;
-                else if (previousPatternSize + _dX < MIN_PATTERN_SIZE)
-                    PatternSize = MIN_PATTERN_SIZE;
+                if (eventHandling_previousTemplateSize + _dX > MAX_TEMPLATE_SIZE)
+                    TemplateSize = MAX_TEMPLATE_SIZE;
+                else if (eventHandling_previousTemplateSize + _dX < MIN_TEMPLATE_SIZE)
+                    TemplateSize = MIN_TEMPLATE_SIZE;
                 else
-                    PatternSize = previousPatternSize + _dX;
+                    TemplateSize = eventHandling_previousTemplateSize + _dX;
             }
 
             void ResizeTemplateClippingArea(int _dX, int _dY)
             {
-                PatternXOffset = previousClipPathOffsetX + _dX;
-                PatternYOffset = previousClipPathOffsetY + _dY;
+                TemplateXOffset = eventHandling_previousTemplateXOffset + _dX;
+                TemplateYOffset = eventHandling_previousTemplateYOffset + _dY;
             }
 
             void RotateTemplateClippingArea(int _dX)
             {
-                var rotation = previousClipPathRotation - _dX / 10f;
+                var rotation = eventHandling_previousTemplateRotation - _dX / 10f;
                 if (rotation > 360)
-                    PatternRotation = rotation - 360;
+                    TemplateRotation = rotation - 360;
                 else if (rotation < 0)
-                    PatternRotation = rotation + 360;
+                    TemplateRotation = rotation + 360;
                 else
-                    PatternRotation = rotation;
+                    TemplateRotation = rotation;
             }
         }
 
@@ -379,10 +397,12 @@ namespace Kvh.Kaleidoscope
         private void RandomizeTemplateExtractionParameters()
         {
             var random = new Random((int)DateTime.Now.Ticks);
-            PatternSize = random.Next(MIN_PATTERN_SIZE, Math.Min(ImageScaledWidth, imageScaledHeight));
-            PatternXOffset = random.Next(0, ImageScaledWidth - PatternSize);
-            PatternYOffset = random.Next(0, ImageScaledHeight - PatternSize);
-            PatternRotation = random.Next(0, 300) / 10f;
+            TemplateSize = random.Next(MIN_TEMPLATE_SIZE, Math.Min(ImageScaledWidth, imageScaledHeight));
+            //var templateBoundarySize = Model.MirrorSystem.GetUntransformedTemplateRectangularSize(TemplateSize);
+            //var widestTemplateBoundary = (int)Math.Max(templateBoundarySize.X, templateBoundarySize.Y);
+            TemplateXOffset = random.Next(0, ImageScaledWidth - TemplateSize);
+            TemplateYOffset = random.Next(0, ImageScaledHeight - TemplateSize);
+            TemplateRotation = random.Next(0, 360) / 10f;
         }
 
         private void Render()
@@ -492,6 +512,18 @@ namespace Kvh.Kaleidoscope
             ActivatePreviewWindowAtTopRightSide();
         }
 
+        private void toolStripDropDownButton1_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Text.Contains("30-60-90"))
+                Controller.SetMirorrSystem(typeof(MirrorSystem306090));
+            else if (e.ClickedItem.Text.Contains("60-60-60"))
+                Controller.SetMirorrSystem(typeof(MirrorSystem606060));
+            else if (e.ClickedItem.Text.Contains("45-90-45"))
+                Controller.SetMirorrSystem(typeof(MirrorSystem459045));
+            else
+                return;
+        }
+
         private void toolStripLabelSourceImage_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
@@ -506,81 +538,95 @@ namespace Kvh.Kaleidoscope
             }
         }
 
-        private void toolStripTextBox1_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void toolStripTextBox6_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var previousValue = patternSize;
-            if (!ValidateInt(((ToolStripTextBox)sender).Text,
-                MIN_PATTERN_SIZE, MAX_PATTERN_SIZE,
-                "Size", ref patternSize, toolStrip4))
-                e.Cancel = true;
-            else if (previousValue != patternSize)
-                UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder();
+            // TODO: validate angle
         }
 
-        private void toolStripTextBox2_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            var previousValue = patternXOffset;
-            if (!ValidateInt(((ToolStripTextBox)sender).Text,
-                int.MinValue, int.MaxValue,
-                "X Offset", ref patternXOffset, toolStrip4))
-                e.Cancel = true;
-            else if (previousValue != patternXOffset)
-                UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder();
-        }
-
-        private void toolStripTextBox3_Validating(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            var previousValue = imageScaledWidth;
-            if (!ValidateInt(((ToolStripTextBox)sender).Text,
-                 MIN_IMG_SIZE, MAX_IMG_SIZE,
-                 "Width", ref imageScaledWidth, toolStrip2))
-                e.Cancel = true;
-            else if (IsARLocked && Model.SourceImage != null)
-            {
-                if (previousValue != imageScaledWidth)
-                {
-                    ImageScaledHeight = (int)(Math.Round((float)ImageScaledWidth / Model.SourceImage.Width * Model.SourceImage.Height, 0));
-                    UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder();
-                }
-            }
-        }
-
-        private void toolStripTextBox4_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void toolStripTextBoxScaledHeight_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             var previousValue = imageScaledHeight;
             if (!ValidateInt(((ToolStripTextBox)sender).Text,
                 MIN_IMG_SIZE, MAX_IMG_SIZE,
                 "Height", ref imageScaledHeight, toolStrip2))
                 e.Cancel = true;
-            else if (IsARLocked && Model.SourceImage != null)
+            else if (Model.SourceImage != null)
             {
                 if (previousValue != imageScaledHeight)
                 {
-                    ImageScaledWidth = (int)(Math.Round((float)ImageScaledHeight / Model.SourceImage.Height * Model.SourceImage.Width, 0));
+                    if (IsARLocked)
+                    {
+                        Controller.ScaleSourceImageByHeight(ImageScaledHeight);
+                        ImageScaledWidth = Model.ScaledImage.Width;
+                    }
+                    else
+                    {
+                        Controller.ScaleSourceImage(ImageScaledWidth, ImageScaledHeight);
+                    }
                     UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder();
                 }
             }
         }
 
-        private void toolStripTextBox5_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void toolStripTextBoxScaledWidth_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            var previousValue = patternYOffset;
+            var previousValue = imageScaledWidth;
             if (!ValidateInt(((ToolStripTextBox)sender).Text,
-                int.MinValue, int.MaxValue,
-                "Y Offset", ref patternYOffset, toolStrip4))
+                 MIN_IMG_SIZE, MAX_IMG_SIZE,
+                 "Width", ref imageScaledWidth, toolStrip2))
                 e.Cancel = true;
-            else if (previousValue != patternYOffset)
+            else if (Model.SourceImage != null)
+            {
+                if (previousValue != imageScaledWidth)
+                {
+                    if (IsARLocked)
+                    {
+                        Controller.ScaleSourceImageByWidth(ImageScaledWidth);
+                        ImageScaledHeight = Model.ScaledImage.Height;
+                    }
+                    else
+                    {
+                        Controller.ScaleSourceImage(ImageScaledWidth, ImageScaledHeight);
+                    }
+                    UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder();
+                }
+            }
+        }
+
+        private void toolStripTextBoxTemplateSize_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var previousValue = templateSize;
+            if (!ValidateInt(((ToolStripTextBox)sender).Text,
+                MIN_TEMPLATE_SIZE, MAX_TEMPLATE_SIZE,
+                "Size", ref templateSize, toolStrip4))
+                e.Cancel = true;
+            else if (previousValue != templateSize)
                 UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder();
         }
 
-        private void toolStripTextBox6_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private void toolStripTextBoxTemplateXOffset_Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            // TODO: validate angle
+            var previousValue = templateXOffset;
+            if (!ValidateInt(((ToolStripTextBox)sender).Text,
+                int.MinValue, int.MaxValue,
+                "X Offset", ref templateXOffset, toolStrip4))
+                e.Cancel = true;
+            else if (previousValue != templateXOffset)
+                UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder();
         }
-
+        private void toolStripTextBoxTemplateYOffset_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            var previousValue = templateYOffset;
+            if (!ValidateInt(((ToolStripTextBox)sender).Text,
+                int.MinValue, int.MaxValue,
+                "Y Offset", ref templateYOffset, toolStrip4))
+                e.Cancel = true;
+            else if (previousValue != templateYOffset)
+                UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder();
+        }
         private void UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder()
         {
-            Controller.UpdateTemplateExtractionParametersFromViewToModel();
+            Controller.SetTemplateExtractionParameters(TemplateSize, TemplateXOffset, TemplateYOffset, templateRotation);
             Controller.UpdateClippingPathOnTemplateFinder();
         }
         private bool ValidateInt(string text, int min, int max, string valueLabel, ref int valueToUpdate, Control control)
@@ -620,20 +666,6 @@ namespace Kvh.Kaleidoscope
                 // Always allow message to continue to the next filter control
                 return false;
             }
-        }
-
-        private void toolStripDropDownButton1_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
-        {
-            if (e.ClickedItem.Text.Contains("30-60-90"))
-                Controller.SetMirorrSystem(typeof(MirrorSystem306090));
-            else if (e.ClickedItem.Text.Contains("60-60-60"))
-                Controller.SetMirorrSystem(typeof(MirrorSystem606060));
-            else if (e.ClickedItem.Text.Contains("45-90-45"))
-                Controller.SetMirorrSystem(typeof(MirrorSystem459045));
-            else
-                return;
-
-            toolStripDropDownButton1.Text = e.ClickedItem.Text;
         }
     }
 }

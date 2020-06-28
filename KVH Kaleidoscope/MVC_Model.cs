@@ -10,10 +10,6 @@ namespace Kvh.Kaleidoscope
 {
     public class MVC_Model
     {
-        //public InterpolationMode GraphicsInterpolationMode;
-        //public PixelOffsetMode GraphicsPixelOffsetMode;
-        //public SmoothingMode GraphicsSmoothingMode;
-
         public bool IsAutoFillGaps;
         public int IsLockAspectRatio;
         
@@ -27,8 +23,6 @@ namespace Kvh.Kaleidoscope
         public int RenderingWidth;
         
         public Bitmap ScaledImage;
-        public int ScaledImageHeight;
-        public int ScaledImageWidth;
         
         public Bitmap SourceImage;
         public string SourceImageFullPath;

@@ -23,20 +23,18 @@ namespace Kvh.Kaleidoscope
 
             this.view.Controller = this;
             this.view.Model = this.model;
-
-            //TODO
-            //model.GraphicsInterpolationMode = InterpolationMode.HighQualityBicubic;
-            //model.GraphicsPixelOffsetMode = PixelOffsetMode.HighQuality;
-            //model.GraphicsSmoothingMode = SmoothingMode.AntiAlias;
-            KaleidoscopeRenderer.SetGraphicsModes(SmoothingMode.AntiAlias,
+            
+            KaleidoscopeRenderer.SetGraphicsModes(
+                SmoothingMode.AntiAlias,
                 PixelOffsetMode.HighQuality,
                 InterpolationMode.HighQualityBicubic);
+            
             SetMirorrSystem(new MirrorSystem306090());
         }
 
-        public void SetMirorrSystem(MirrorSystem mirroSystem)
+        public void SetMirorrSystem(MirrorSystem mirrorSystem)
         {
-            model.MirrorSystem = mirroSystem;
+            model.MirrorSystem = mirrorSystem;
             view.UpdateMirrorSystem();
         }
 
@@ -57,20 +55,20 @@ namespace Kvh.Kaleidoscope
             }
         }
 
-        public void UpdateTemplateExtractionParametersFromViewToModel()
+        public void SetTemplateExtractionParameters(int size, int xOffset, int yOffset, float rotation)
         {
-            model.TemplateExtractionSize = view.PatternSize;
-            model.TemplateExtractionOffsetX = view.PatternXOffset;
-            model.TemplateExtractionOffsetY = view.PatternYOffset;
-            model.TemplateExtractionRotaion = view.PatternRotation;
+            model.TemplateExtractionSize = size;
+            model.TemplateExtractionOffsetX = xOffset;
+            model.TemplateExtractionOffsetY = yOffset;
+            model.TemplateExtractionRotaion = rotation;
         }
 
         public void UpdateTemplateExtractionParameterFromModelToView()
         {
-            view.PatternSize = model.TemplateExtractionSize;
-            view.PatternXOffset = model.TemplateExtractionOffsetX;
-            view.PatternYOffset = model.TemplateExtractionOffsetY;
-            view.PatternRotation = model.TemplateExtractionRotaion;
+            view.TemplateSize = model.TemplateExtractionSize;
+            view.TemplateXOffset = model.TemplateExtractionOffsetX;
+            view.TemplateYOffset = model.TemplateExtractionOffsetY;
+            view.TemplateRotation = model.TemplateExtractionRotaion;
         }
 
         public void ScaleSourceImage(int targetWidth, int targetHeight)
@@ -81,6 +79,8 @@ namespace Kvh.Kaleidoscope
 
         public void UpdateClippingPathOnTemplateFinder()
         {
+            if (model.ScaledImage == null)
+                return;
             // use a temp bitmap to avoid flickering
             var templateFinderBitmap = model.ScaledImage.Clone() as Bitmap;
             var clippingPath = model.MirrorSystem.GetUntransformedTemplateClippingPolygon(
