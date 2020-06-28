@@ -33,7 +33,7 @@ namespace Kvh.Kaleidoscope
             var destRect = new Rectangle(0, 0, width, height);
             var destImage = new Bitmap(width, height);
 
-            destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+            //destImage.SetResolution(image.HorizontalResolution, image.VerticalResolution);
 
             using (var graphics = Graphics.FromImage(destImage))
             {
@@ -74,8 +74,8 @@ namespace Kvh.Kaleidoscope
             {
                 for (int j = 0; j < nTotalCols; j++)
                 {
-                    var x = j * (image.Width - 2) + initOffsetX;
-                    var y = i * (image.Height - 2) + initOffsetY;
+                    var x = j * (image.Width) + initOffsetX;
+                    var y = i * (image.Height) + initOffsetY;
                     g.DrawImage(image, new PointF(x, y));
                 }
             }
@@ -156,14 +156,14 @@ namespace Kvh.Kaleidoscope
             {
                 g.DrawImageAtLoactionAndAngle(
                     patterns[patternIndices[i]],
-                    patternWidth * xOffsetFactors[i], 
-                    patternHeight * yOffsetFactors[i], 
+                    patternWidth * xOffsetFactors[i],
+                    patternHeight * yOffsetFactors[i],
                     rotationAngles[i]);
             }
         }
 
         public static void DrawSet(this Graphics g, Bitmap[] patterns,
-             float patternWidth, float patternHeight, 
+             float patternWidth, float patternHeight,
              TransformationSet transformations)
         {
             for (var i = 0; i < transformations.Length; i++)
@@ -173,6 +173,11 @@ namespace Kvh.Kaleidoscope
                     patternWidth * transformations.XOffsetFactors[i],
                     patternHeight * transformations.YOffsetFactors[i],
                     transformations.Rotations[i]);
+                //var x = patternWidth * transformations.XOffsetFactors[i];
+                //var y = patternHeight * transformations.YOffsetFactors[i];
+                //var w = patterns[transformations.TemplateIndices[i]].Width;
+                //var h = patterns[transformations.TemplateIndices[i]].Height;
+                //Console.WriteLine("{" + x + ", " + y + "} -> {" + (x + w) + ", " + (y + h) + "}");
             }
         }
 

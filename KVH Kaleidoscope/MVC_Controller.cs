@@ -84,7 +84,7 @@ namespace Kvh.Kaleidoscope
             // use a temp bitmap to avoid flickering
             var templateFinderBitmap = model.ScaledImage.Clone() as Bitmap;
             var clippingPath = model.MirrorSystem.GetUntransformedTemplateClippingPolygon(
-                model.TemplateExtractionSize).ToGraphicsPath();
+                model.TemplateExtractionSize, 0).ToGraphicsPath();
             var graphics = Graphics.FromImage(templateFinderBitmap);
             
             graphics.SmoothingMode = KaleidoscopeRenderer.SmoothingMode;

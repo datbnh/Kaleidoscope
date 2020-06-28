@@ -19,7 +19,7 @@ namespace Kvh.Kaleidoscope
             var pSize = mirrorSystem.GetUntransformedTemplateRectangularSize(size);
 
             Bitmap template = new Bitmap((int)Math.Round(pSize.X), (int)Math.Round(pSize.Y, 0));
-            template.SetResolution(image.HorizontalResolution, image.VerticalResolution);
+            //template.SetResolution(image.HorizontalResolution, image.VerticalResolution);
             var gTemplate = Graphics.FromImage(template);
             gTemplate.SmoothingMode = SmoothingMode;
             gTemplate.PixelOffsetMode = PixelOffsetMode;
@@ -42,7 +42,7 @@ namespace Kvh.Kaleidoscope
             Bitmap bitmap = new Bitmap(
                 template.Width * mirrorSystem.TilableRectangularPatternHorizontalSpan,
                 template.Height * mirrorSystem.TilableRectangularPatternVerticalSpan);
-            bitmap.SetResolution(template.HorizontalResolution, template.VerticalResolution);
+            //bitmap.SetResolution(template.HorizontalResolution, template.VerticalResolution);
 
             var flippedXTemplate = template.Clone() as Bitmap;
             flippedXTemplate.RotateFlip(RotateFlipType.RotateNoneFlipX);

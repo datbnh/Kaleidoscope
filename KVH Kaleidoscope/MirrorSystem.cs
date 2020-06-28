@@ -32,8 +32,8 @@ namespace Kvh.Kaleidoscope
         /// <returns></returns>
         public abstract int TilableRectangularPatternVerticalSpan { get; }
 
-        public abstract PointF[] GetUntransformedTemplateClippingPolygon(int size);
+        public abstract PointF[] GetUntransformedTemplateClippingPolygon(float size, float boundaryOverlapping=1f);
 
-        public abstract PointF GetUntransformedTemplateRectangularSize(int size);
+        public abstract PointF GetUntransformedTemplateRectangularSize(float size);
     }
 }

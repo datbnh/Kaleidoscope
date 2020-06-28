@@ -22,16 +22,17 @@ namespace Kvh.Kaleidoscope
 
         public override int TilableRectangularPatternVerticalSpan => 4;
 
-        public override PointF[] GetUntransformedTemplateClippingPolygon(int size)
+        public override PointF[] GetUntransformedTemplateClippingPolygon(float size, float boundaryOverlapping)
         {
             var pSize = GetUntransformedTemplateRectangularSize(size);
+            var overlap = GetUntransformedTemplateRectangularSize(boundaryOverlapping);
             return new[] {
-                new PointF(0, 0),
-                new PointF(pSize.X, 0),
-                new PointF(pSize.X/2, pSize.Y)};
+                new PointF(-overlap.X, -overlap.Y),
+                new PointF(pSize.X + overlap.X, -overlap.Y),
+                new PointF(pSize.X, pSize.Y + overlap.Y)};
         }
 
-        public override PointF GetUntransformedTemplateRectangularSize(int size)
+        public override PointF GetUntransformedTemplateRectangularSize(float size)
         {
             return new PointF(size, size / 2);
         }
