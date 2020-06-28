@@ -72,11 +72,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="FlipMode.cs" />
     <Compile Include="Helpers.cs" />
-    <Compile Include="IKaleidoscope.cs" />
     <Compile Include="KaleidoscopeRenderer.cs" />
-    <Compile Include="Kaleidoscope306090Triangle.cs" />
     <Compile Include="MirrorSystem306090.cs" />
     <Compile Include="MirrorSystem606060.cs" />
     <Compile Include="MVC_View.cs">
@@ -87,7 +84,6 @@
     </Compile>
     <Compile Include="GraphicsExtensions.cs" />
     <Compile Include="MirrorSystem.cs" />
-    <Compile Include="KaleidoscopeEquilateralTriangle.cs" />
     <Compile Include="MVC_Controller.cs" />
     <Compile Include="MVC_Model.cs" />
     <Compile Include="Program.cs" />
