@@ -144,40 +144,17 @@ namespace Kvh.Kaleidoscope
         /// <param name="rotationAngles"></param>
         /// <param name="patternIndices"></param>
         public static void DrawSet(this Graphics g, Bitmap[] patterns,
-            float patternWidth, float patternHeight,
-            float[] xOffsetFactors, float[] yOffsetFactors, float[] rotationAngles, int[] patternIndices)
-        {
-            if (!((xOffsetFactors.Length == yOffsetFactors.Length) &&
-                (yOffsetFactors.Length == rotationAngles.Length) &&
-                (rotationAngles.Length == patternIndices.Length)))
-                throw new Exception("Array sizes mismatched.");
-
-            for (var i = 0; i < xOffsetFactors.Length; i++)
-            {
-                g.DrawImageAtLoactionAndAngle(
-                    patterns[patternIndices[i]],
-                    patternWidth * xOffsetFactors[i],
-                    patternHeight * yOffsetFactors[i],
-                    rotationAngles[i]);
-            }
-        }
-
-        public static void DrawSet(this Graphics g, Bitmap[] patterns,
-             float patternWidth, float patternHeight,
              TransformationSet transformations)
         {
+            var width = patterns[0].Width;
+            var height = patterns[0].Height;
             for (var i = 0; i < transformations.Length; i++)
             {
                 g.DrawImageAtLoactionAndAngle(
                     patterns[transformations.TemplateIndices[i]],
-                    patternWidth * transformations.XOffsetFactors[i],
-                    patternHeight * transformations.YOffsetFactors[i],
+                    width * transformations.XOffsetFactors[i],
+                    height * transformations.YOffsetFactors[i],
                     transformations.Rotations[i]);
-                //var x = patternWidth * transformations.XOffsetFactors[i];
-                //var y = patternHeight * transformations.YOffsetFactors[i];
-                //var w = patterns[transformations.TemplateIndices[i]].Width;
-                //var h = patterns[transformations.TemplateIndices[i]].Height;
-                //Console.WriteLine("{" + x + ", " + y + "} -> {" + (x + w) + ", " + (y + h) + "}");
             }
         }
 

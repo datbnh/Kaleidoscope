@@ -29,7 +29,7 @@ namespace Kvh.Kaleidoscope
             return new[] {
                 new PointF(-overlap.X, -overlap.Y),
                 new PointF(pSize.X + overlap.X, -overlap.Y),
-                new PointF(pSize.X, pSize.Y + overlap.Y)};
+                new PointF(pSize.X/2, pSize.Y + overlap.Y)};
         }
 
         public override PointF GetUntransformedTemplateRectangularSize(float size)

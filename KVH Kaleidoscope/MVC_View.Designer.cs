@@ -41,18 +41,6 @@
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButtonSourceImage = new System.Windows.Forms.ToolStripButton();
-            this.toolStripLabelSourceImage = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripLabelImageSize = new System.Windows.Forms.ToolStripLabel();
-            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
-            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripTextBoxScaledWidth = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
-            this.toolStripTextBoxScaledHeight = new System.Windows.Forms.ToolStripTextBox();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButtonLockAR = new System.Windows.Forms.ToolStripButton();
             this.toolStrip4 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel3 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
@@ -77,14 +65,26 @@
             this.toolStripButtonAutoPatch = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton5 = new System.Windows.Forms.ToolStripButton();
-            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+            this.toolStrip2 = new System.Windows.Forms.ToolStrip();
+            this.toolStripLabel5 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxScaledWidth = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripLabel6 = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripTextBoxScaledHeight = new System.Windows.Forms.ToolStripTextBox();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButtonLockAR = new System.Windows.Forms.ToolStripButton();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButtonSourceImage = new System.Windows.Forms.ToolStripButton();
+            this.toolStripLabelSourceImage = new System.Windows.Forms.ToolStripLabel();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabelImageSize = new System.Windows.Forms.ToolStripLabel();
             this.toolStrip5 = new System.Windows.Forms.ToolStrip();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.triangleToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.triangleToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.triangleToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.errorProvider1 = new System.Windows.Forms.ErrorProvider(this.components);
+            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.statusStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
@@ -92,12 +92,12 @@
             this.toolStripContainer1.TopToolStripPanel.SuspendLayout();
             this.toolStripContainer1.SuspendLayout();
             this.panel1.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
-            this.toolStrip2.SuspendLayout();
             this.toolStrip4.SuspendLayout();
             this.toolStrip3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
+            this.toolStrip2.SuspendLayout();
+            this.toolStrip1.SuspendLayout();
             this.toolStrip5.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -189,7 +189,7 @@
             this.toolStripContainer1.ContentPanel.AutoScroll = true;
             this.toolStripContainer1.ContentPanel.Controls.Add(this.panel1);
             this.toolStripContainer1.ContentPanel.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(968, 393);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(968, 350);
             this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
             // 
             // toolStripContainer1.LeftToolStripPanel
@@ -207,11 +207,11 @@
             // 
             // toolStripContainer1.TopToolStripPanel
             // 
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip4);
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip3);
-            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip1);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip2);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip4);
             this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip5);
+            this.toolStripContainer1.TopToolStripPanel.Controls.Add(this.toolStrip3);
             this.toolStripContainer1.TopToolStripPanel.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             // 
             // panel1
@@ -223,118 +223,9 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(968, 393);
+            this.panel1.Size = new System.Drawing.Size(968, 350);
             this.panel1.TabIndex = 1;
             this.panel1.SizeChanged += new System.EventHandler(this.panel1_SizeChanged);
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.CanOverflow = false;
-            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripButtonSourceImage,
-            this.toolStripLabelSourceImage,
-            this.toolStripSeparator1,
-            this.toolStripLabelImageSize});
-            this.toolStrip1.Location = new System.Drawing.Point(4, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(384, 34);
-            this.toolStrip1.TabIndex = 0;
-            // 
-            // toolStripButtonSourceImage
-            // 
-            this.toolStripButtonSourceImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonSourceImage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.toolStripButtonSourceImage.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSourceImage.Image")));
-            this.toolStripButtonSourceImage.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonSourceImage.Name = "toolStripButtonSourceImage";
-            this.toolStripButtonSourceImage.Size = new System.Drawing.Size(137, 29);
-            this.toolStripButtonSourceImage.Text = "Source Image:";
-            this.toolStripButtonSourceImage.ToolTipText = "Click to Open...";
-            this.toolStripButtonSourceImage.Click += new System.EventHandler(this.toolStripLabelSourceImage_Click);
-            // 
-            // toolStripLabelSourceImage
-            // 
-            this.toolStripLabelSourceImage.Name = "toolStripLabelSourceImage";
-            this.toolStripLabelSourceImage.Size = new System.Drawing.Size(159, 29);
-            this.toolStripLabelSourceImage.Text = "No Image Loaded.";
-            // 
-            // toolStripSeparator1
-            // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 34);
-            // 
-            // toolStripLabelImageSize
-            // 
-            this.toolStripLabelImageSize.Name = "toolStripLabelImageSize";
-            this.toolStripLabelImageSize.Size = new System.Drawing.Size(64, 29);
-            this.toolStripLabelImageSize.Text = "W × H";
-            // 
-            // toolStrip2
-            // 
-            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
-            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.toolStripLabel5,
-            this.toolStripTextBoxScaledWidth,
-            this.toolStripLabel6,
-            this.toolStripTextBoxScaledHeight,
-            this.toolStripSeparator2,
-            this.toolStripButtonLockAR});
-            this.toolStrip2.Location = new System.Drawing.Point(403, 0);
-            this.toolStrip2.Name = "toolStrip2";
-            this.toolStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip2.Size = new System.Drawing.Size(371, 34);
-            this.toolStrip2.TabIndex = 1;
-            // 
-            // toolStripLabel5
-            // 
-            this.toolStripLabel5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
-            this.toolStripLabel5.Name = "toolStripLabel5";
-            this.toolStripLabel5.Size = new System.Drawing.Size(129, 29);
-            this.toolStripLabel5.Text = "Resize Image:";
-            // 
-            // toolStripTextBoxScaledWidth
-            // 
-            this.toolStripTextBoxScaledWidth.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.toolStripTextBoxScaledWidth.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.toolStripTextBoxScaledWidth.Name = "toolStripTextBoxScaledWidth";
-            this.toolStripTextBoxScaledWidth.Size = new System.Drawing.Size(40, 34);
-            this.toolStripTextBoxScaledWidth.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox3_Validating);
-            // 
-            // toolStripLabel6
-            // 
-            this.toolStripLabel6.Name = "toolStripLabel6";
-            this.toolStripLabel6.Size = new System.Drawing.Size(24, 29);
-            this.toolStripLabel6.Text = "×";
-            // 
-            // toolStripTextBoxScaledHeight
-            // 
-            this.toolStripTextBoxScaledHeight.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.toolStripTextBoxScaledHeight.Font = new System.Drawing.Font("Segoe UI", 9F);
-            this.toolStripTextBoxScaledHeight.Name = "toolStripTextBoxScaledHeight";
-            this.toolStripTextBoxScaledHeight.Size = new System.Drawing.Size(40, 34);
-            this.toolStripTextBoxScaledHeight.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox4_Validating);
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 34);
-            // 
-            // toolStripButtonLockAR
-            // 
-            this.toolStripButtonLockAR.Checked = true;
-            this.toolStripButtonLockAR.CheckOnClick = true;
-            this.toolStripButtonLockAR.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.toolStripButtonLockAR.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButtonLockAR.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLockAR.Image")));
-            this.toolStripButtonLockAR.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButtonLockAR.Name = "toolStripButtonLockAR";
-            this.toolStripButtonLockAR.Size = new System.Drawing.Size(106, 29);
-            this.toolStripButtonLockAR.Text = "🔒 Lock AR";
-            this.toolStripButtonLockAR.ToolTipText = "Lock Aspect Ratio";
             // 
             // toolStrip4
             // 
@@ -357,7 +248,7 @@
             this.toolStripButtonPreviewTemplate,
             this.toolStripSeparator6,
             this.toolStripButtonRandomise});
-            this.toolStrip4.Location = new System.Drawing.Point(4, 34);
+            this.toolStrip4.Location = new System.Drawing.Point(4, 0);
             this.toolStrip4.Name = "toolStrip4";
             this.toolStrip4.Size = new System.Drawing.Size(964, 34);
             this.toolStrip4.TabIndex = 3;
@@ -484,10 +375,10 @@
             this.toolStripButtonAutoPatch,
             this.toolStripSeparator9,
             this.toolStripButton5});
-            this.toolStrip3.Location = new System.Drawing.Point(516, 68);
+            this.toolStrip3.Location = new System.Drawing.Point(4, 136);
             this.toolStrip3.Name = "toolStrip3";
             this.toolStrip3.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip3.Size = new System.Drawing.Size(369, 39);
+            this.toolStrip3.Size = new System.Drawing.Size(363, 39);
             this.toolStrip3.TabIndex = 2;
             this.toolStrip3.Text = "Test";
             // 
@@ -540,6 +431,7 @@
             // 
             this.toolStripSeparator9.Name = "toolStripSeparator9";
             this.toolStripSeparator9.Size = new System.Drawing.Size(6, 39);
+            this.toolStripSeparator9.Visible = false;
             // 
             // toolStripButton5
             // 
@@ -551,9 +443,114 @@
             this.toolStripButton5.Text = "Save Rendered Image to File...";
             this.toolStripButton5.Click += new System.EventHandler(this.toolStripButtonSaveRenderedImage_Click);
             // 
-            // errorProvider1
+            // toolStrip2
             // 
-            this.errorProvider1.ContainerControl = this;
+            this.toolStrip2.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip2.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip2.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripLabel5,
+            this.toolStripTextBoxScaledWidth,
+            this.toolStripLabel6,
+            this.toolStripTextBoxScaledHeight,
+            this.toolStripSeparator2,
+            this.toolStripButtonLockAR});
+            this.toolStrip2.Location = new System.Drawing.Point(4, 68);
+            this.toolStrip2.Name = "toolStrip2";
+            this.toolStrip2.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolStrip2.Size = new System.Drawing.Size(371, 34);
+            this.toolStrip2.TabIndex = 1;
+            // 
+            // toolStripLabel5
+            // 
+            this.toolStripLabel5.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.toolStripLabel5.Name = "toolStripLabel5";
+            this.toolStripLabel5.Size = new System.Drawing.Size(129, 29);
+            this.toolStripLabel5.Text = "Resize Image:";
+            // 
+            // toolStripTextBoxScaledWidth
+            // 
+            this.toolStripTextBoxScaledWidth.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.toolStripTextBoxScaledWidth.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBoxScaledWidth.Name = "toolStripTextBoxScaledWidth";
+            this.toolStripTextBoxScaledWidth.Size = new System.Drawing.Size(40, 34);
+            this.toolStripTextBoxScaledWidth.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox3_Validating);
+            // 
+            // toolStripLabel6
+            // 
+            this.toolStripLabel6.Name = "toolStripLabel6";
+            this.toolStripLabel6.Size = new System.Drawing.Size(24, 29);
+            this.toolStripLabel6.Text = "×";
+            // 
+            // toolStripTextBoxScaledHeight
+            // 
+            this.toolStripTextBoxScaledHeight.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.toolStripTextBoxScaledHeight.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.toolStripTextBoxScaledHeight.Name = "toolStripTextBoxScaledHeight";
+            this.toolStripTextBoxScaledHeight.Size = new System.Drawing.Size(40, 34);
+            this.toolStripTextBoxScaledHeight.Validating += new System.ComponentModel.CancelEventHandler(this.toolStripTextBox4_Validating);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 34);
+            // 
+            // toolStripButtonLockAR
+            // 
+            this.toolStripButtonLockAR.Checked = true;
+            this.toolStripButtonLockAR.CheckOnClick = true;
+            this.toolStripButtonLockAR.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.toolStripButtonLockAR.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonLockAR.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonLockAR.Image")));
+            this.toolStripButtonLockAR.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonLockAR.Name = "toolStripButtonLockAR";
+            this.toolStripButtonLockAR.Size = new System.Drawing.Size(106, 29);
+            this.toolStripButtonLockAR.Text = "🔒 Lock AR";
+            this.toolStripButtonLockAR.ToolTipText = "Lock Aspect Ratio";
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.CanOverflow = false;
+            this.toolStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButtonSourceImage,
+            this.toolStripLabelSourceImage,
+            this.toolStripSeparator1,
+            this.toolStripLabelImageSize});
+            this.toolStrip1.Location = new System.Drawing.Point(4, 102);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
+            this.toolStrip1.Size = new System.Drawing.Size(384, 34);
+            this.toolStrip1.TabIndex = 0;
+            // 
+            // toolStripButtonSourceImage
+            // 
+            this.toolStripButtonSourceImage.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButtonSourceImage.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+            this.toolStripButtonSourceImage.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButtonSourceImage.Image")));
+            this.toolStripButtonSourceImage.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonSourceImage.Name = "toolStripButtonSourceImage";
+            this.toolStripButtonSourceImage.Size = new System.Drawing.Size(137, 29);
+            this.toolStripButtonSourceImage.Text = "Source Image:";
+            this.toolStripButtonSourceImage.ToolTipText = "Click to Open...";
+            this.toolStripButtonSourceImage.Click += new System.EventHandler(this.toolStripLabelSourceImage_Click);
+            // 
+            // toolStripLabelSourceImage
+            // 
+            this.toolStripLabelSourceImage.Name = "toolStripLabelSourceImage";
+            this.toolStripLabelSourceImage.Size = new System.Drawing.Size(159, 29);
+            this.toolStripLabelSourceImage.Text = "No Image Loaded.";
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 34);
+            // 
+            // toolStripLabelImageSize
+            // 
+            this.toolStripLabelImageSize.Name = "toolStripLabelImageSize";
+            this.toolStripLabelImageSize.Size = new System.Drawing.Size(64, 29);
+            this.toolStripLabelImageSize.Text = "W × H";
             // 
             // toolStrip5
             // 
@@ -562,7 +559,7 @@
             this.toolStrip5.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripLabel1,
             this.toolStripDropDownButton1});
-            this.toolStrip5.Location = new System.Drawing.Point(6, 68);
+            this.toolStrip5.Location = new System.Drawing.Point(4, 34);
             this.toolStrip5.Name = "toolStrip5";
             this.toolStrip5.Size = new System.Drawing.Size(324, 34);
             this.toolStrip5.TabIndex = 4;
@@ -591,20 +588,24 @@
             // triangleToolStripMenuItem
             // 
             this.triangleToolStripMenuItem.Name = "triangleToolStripMenuItem";
-            this.triangleToolStripMenuItem.Size = new System.Drawing.Size(270, 34);
+            this.triangleToolStripMenuItem.Size = new System.Drawing.Size(253, 34);
             this.triangleToolStripMenuItem.Text = "60-60-60 Triangle";
             // 
             // triangleToolStripMenuItem1
             // 
             this.triangleToolStripMenuItem1.Name = "triangleToolStripMenuItem1";
-            this.triangleToolStripMenuItem1.Size = new System.Drawing.Size(270, 34);
+            this.triangleToolStripMenuItem1.Size = new System.Drawing.Size(253, 34);
             this.triangleToolStripMenuItem1.Text = "30-60-90 Triangle";
             // 
             // triangleToolStripMenuItem2
             // 
             this.triangleToolStripMenuItem2.Name = "triangleToolStripMenuItem2";
-            this.triangleToolStripMenuItem2.Size = new System.Drawing.Size(270, 34);
+            this.triangleToolStripMenuItem2.Size = new System.Drawing.Size(253, 34);
             this.triangleToolStripMenuItem2.Text = "45-90-45 Triangle";
+            // 
+            // errorProvider1
+            // 
+            this.errorProvider1.ContainerControl = this;
             // 
             // MVC_View
             // 
@@ -636,17 +637,17 @@
             this.toolStripContainer1.PerformLayout();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
-            this.toolStrip2.ResumeLayout(false);
-            this.toolStrip2.PerformLayout();
             this.toolStrip4.ResumeLayout(false);
             this.toolStrip4.PerformLayout();
             this.toolStrip3.ResumeLayout(false);
             this.toolStrip3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
+            this.toolStrip2.ResumeLayout(false);
+            this.toolStrip2.PerformLayout();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.toolStrip5.ResumeLayout(false);
             this.toolStrip5.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errorProvider1)).EndInit();
             this.ResumeLayout(false);
 
         }

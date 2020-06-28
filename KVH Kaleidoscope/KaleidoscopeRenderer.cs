@@ -38,7 +38,6 @@ namespace Kvh.Kaleidoscope
 
         public static Bitmap GetTileableRectangularPattern(Bitmap template, MirrorSystem mirrorSystem)
         {
-            var floatSize = mirrorSystem.GetUntransformedTemplateRectangularSize(template.Width);
             Bitmap bitmap = new Bitmap(
                 template.Width * mirrorSystem.TilableRectangularPatternHorizontalSpan,
                 template.Height * mirrorSystem.TilableRectangularPatternVerticalSpan);
@@ -54,8 +53,7 @@ namespace Kvh.Kaleidoscope
             g.SmoothingMode = SmoothingMode;
             g.PixelOffsetMode = PixelOffsetMode;
 
-            g.DrawSet(templates, floatSize.X, floatSize.Y,
-                mirrorSystem.TransformationSetForTilableRectangularPattern);
+            g.DrawSet(templates, mirrorSystem.TransformationSetForTilableRectangularPattern);
 
             GraphicsExtensions.FillGaps(bitmap);
 
