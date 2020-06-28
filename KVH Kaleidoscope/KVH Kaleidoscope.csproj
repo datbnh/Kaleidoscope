@@ -77,6 +77,7 @@
     <Compile Include="IKaleidoscope.cs" />
     <Compile Include="KaleidoscopeRenderer.cs" />
     <Compile Include="Kaleidoscope306090Triangle.cs" />
+    <Compile Include="MirrorSystem306090.cs" />
     <Compile Include="MirrorSystem606060.cs" />
     <Compile Include="MVC_View.cs">
       <SubType>Form</SubType>

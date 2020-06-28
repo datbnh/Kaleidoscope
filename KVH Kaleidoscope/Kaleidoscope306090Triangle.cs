@@ -18,7 +18,7 @@ namespace Kvh.Kaleidoscope
         private readonly float[] XOffsetFactors = { 0, 1, 1.5f, 1.5f, 2, 3, 4, 4.5f, 5, 4, 4.5f, 5, 1, 1.5f, 2, 1, 1.5f, 2, 3, 4, 4.5f, 4.5f, 5, 6 };
         private readonly float[] YOffsetFactors = { 0, 0, 0.5f, 0.5f, 1, 1, 1, 0.5f, 0, 1, 0.5f, 0, 2, 1.5f, 1, 2, 1.5f, 1, 1, 1, 1.5f, 1.5f, 2, 2 };
         private readonly float[] RotationAngles = { 0, 60, 60, -120, -120, 180, 180, 120, 120, -60, -60, 0, 180, 120, 120, -60, -60, 0, 0, 60, 60, -120, -120, 180 };
-        private readonly int[] PatternIndices = { 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0 };
+        private readonly int[] PatternIndices =   { 0, 1, 0, 0, 1, 0, 1, 0, 1, 1, 0, 1, 1, 0, 1, 1, 0, 1, 0, 1, 0, 0, 1, 0 };
 
 
         public Bitmap ExtractTemplate(Bitmap image, int size, int x, int y, float angle)

@@ -31,7 +31,7 @@ namespace Kvh.Kaleidoscope
             KaleidoscopeRenderer.SetGraphicsModes(SmoothingMode.AntiAlias,
                 PixelOffsetMode.HighQuality,
                 InterpolationMode.HighQualityBicubic);
-            SetMirorrSystem(new MirrorSystem606060());
+            SetMirorrSystem(new MirrorSystem306090());
         }
 
         public void SetMirorrSystem(MirrorSystem mirroSystem)
