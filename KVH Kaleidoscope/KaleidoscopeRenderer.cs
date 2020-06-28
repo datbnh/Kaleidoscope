@@ -10,23 +10,14 @@ namespace Kvh.Kaleidoscope
 {
     public static class KaleidoscopeRenderer
     {
-        public static SmoothingMode SmoothingMode { get; private set; }
-        public static PixelOffsetMode PixelOffsetMode { get; private set; }
         public static InterpolationMode InterpolationMode { get; private set; }
-
-        public static void SetGraphicsModes(
-            SmoothingMode smoothingMode, PixelOffsetMode pixelOffsetMode, InterpolationMode interpolationMode)
-        {
-            SmoothingMode = smoothingMode;
-            PixelOffsetMode = pixelOffsetMode;
-            InterpolationMode = interpolationMode;
-        }
-
-        public static Bitmap ExtractTemplate(Bitmap image, MirrorSystem mirrorSystem, 
+        public static PixelOffsetMode PixelOffsetMode { get; private set; }
+        public static SmoothingMode SmoothingMode { get; private set; }
+        public static Bitmap ExtractTemplate(Bitmap image, MirrorSystem mirrorSystem,
             int size, int x, int y, float angle)
         {
             var pSize = mirrorSystem.GetUntransformedTemplateRectangularSize(size);
-            
+
             Bitmap template = new Bitmap((int)Math.Round(pSize.X), (int)Math.Round(pSize.Y, 0));
             template.SetResolution(image.HorizontalResolution, image.VerticalResolution);
             var gTemplate = Graphics.FromImage(template);
@@ -49,7 +40,7 @@ namespace Kvh.Kaleidoscope
         {
             var floatSize = mirrorSystem.GetUntransformedTemplateRectangularSize(template.Width);
             Bitmap bitmap = new Bitmap(
-                template.Width * mirrorSystem.TilableRectangularPatternHorizontalSpan, 
+                template.Width * mirrorSystem.TilableRectangularPatternHorizontalSpan,
                 template.Height * mirrorSystem.TilableRectangularPatternVerticalSpan);
             bitmap.SetResolution(template.HorizontalResolution, template.VerticalResolution);
 
@@ -69,6 +60,14 @@ namespace Kvh.Kaleidoscope
             GraphicsExtensions.FillGaps(bitmap);
 
             return bitmap;
+        }
+
+        public static void SetGraphicsModes(
+                            SmoothingMode smoothingMode, PixelOffsetMode pixelOffsetMode, InterpolationMode interpolationMode)
+        {
+            SmoothingMode = smoothingMode;
+            PixelOffsetMode = pixelOffsetMode;
+            InterpolationMode = interpolationMode;
         }
     }
 }

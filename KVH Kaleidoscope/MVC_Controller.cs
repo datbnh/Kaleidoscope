@@ -37,6 +37,7 @@ namespace Kvh.Kaleidoscope
         public void SetMirorrSystem(MirrorSystem mirroSystem)
         {
             model.MirrorSystem = mirroSystem;
+            view.UpdateMirrorSystem();
         }
 
 
@@ -156,6 +157,17 @@ namespace Kvh.Kaleidoscope
             {
                 view.DisplayError("Error Saving File", ex);
             }
+        }
+
+        internal void SetMirorrSystem(Type type)
+        {
+            if (type.IsEquivalentTo(typeof(MirrorSystem306090)))
+                SetMirorrSystem(new MirrorSystem306090());
+            else if (type.IsEquivalentTo(typeof(MirrorSystem606060)))
+                SetMirorrSystem(new MirrorSystem606060());
+            else
+                return;
+            UpdateClippingPathOnTemplateFinder();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Kvh.Kaleidoscope
         private static readonly string _b_assemblyName = System.Reflection.Assembly.GetExecutingAssembly().GetName().Name;
         private static readonly DateTime _c_buildDate = new DateTime(2000, 1, 1).AddDays(_a_version.Build).AddSeconds(_a_version.Revision * 2);
         private static readonly string _d_softwareInfo = $"{_b_assemblyName} {_a_version} by Đạt Bùi\r\n(Built {_c_buildDate})";
-        
+
         private readonly int MAX_IMG_SIZE = 4096;
         private readonly int MAX_PATTERN_SIZE = 450;
         private readonly int MIN_IMG_SIZE = 100;
@@ -29,6 +29,16 @@ namespace Kvh.Kaleidoscope
             AutoSize = true,
             AutoSizeMode = AutoSizeMode.GrowAndShrink,
         };
+
+        internal void UpdateMirrorSystem()
+        {
+            if (Model.MirrorSystem is MirrorSystem606060)
+                toolStripDropDownButton1.Text = "60-60-60 Triangle";
+            else if (Model.MirrorSystem is MirrorSystem306090)
+                toolStripDropDownButton1.Text = "30-60-90 Triangle";
+            else
+                toolStripDropDownButton1.Text = "Unknown Mirror System";
+        }
 
         private readonly RenderWindow renderWindow = new RenderWindow();
         private Point clickedLocation;
@@ -378,13 +388,13 @@ namespace Kvh.Kaleidoscope
         private void Render()
         {
             Stopwatch stopwatch = new Stopwatch();
-            
+
             UpdateTemplateExtractionParametersToModelAndRefreshTemplateFinder();
 
             Controller.ExtractTemplate();
-            
+
             SetStatus("Rendering...");
-            
+
             toolStripContainer1.TopToolStripPanel.Enabled = false;
             Cursor = Cursors.WaitCursor;
             Application.DoEvents();
@@ -481,7 +491,7 @@ namespace Kvh.Kaleidoscope
             Controller.ExtractTemplate();
             ActivatePreviewWindowAtTopRightSide();
         }
-        
+
         private void toolStripLabelSourceImage_Click(object sender, EventArgs e)
         {
             openFileDialog1.ShowDialog();
@@ -610,6 +620,18 @@ namespace Kvh.Kaleidoscope
                 // Always allow message to continue to the next filter control
                 return false;
             }
+        }
+
+        private void toolStripDropDownButton1_DropDownItemClicked(object sender, ToolStripItemClickedEventArgs e)
+        {
+            if (e.ClickedItem.Text.Contains("30-60-90"))
+                Controller.SetMirorrSystem(typeof(MirrorSystem306090));
+            else if (e.ClickedItem.Text.Contains("60-60-60"))
+                Controller.SetMirorrSystem(typeof(MirrorSystem606060));
+            else
+                return;
+
+            toolStripDropDownButton1.Text = e.ClickedItem.Text;
         }
     }
 }
