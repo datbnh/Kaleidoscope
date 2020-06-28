@@ -10,14 +10,14 @@ namespace Kvh.Kaleidoscope
 {
     public class MVC_Model
     {
-        public InterpolationMode GraphicsInterpolationMode;
-        public PixelOffsetMode GraphicsPixelOffsetMode;
-        public SmoothingMode GraphicsSmoothingMode;
+        //public InterpolationMode GraphicsInterpolationMode;
+        //public PixelOffsetMode GraphicsPixelOffsetMode;
+        //public SmoothingMode GraphicsSmoothingMode;
 
         public bool IsAutoFillGaps;
         public int IsLockAspectRatio;
         
-        public IKaleidoscope Kaleidoscope;
+        public MirrorSystem MirrorSystem;
         
         public Bitmap RectangularPattern;
         

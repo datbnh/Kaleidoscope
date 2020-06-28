@@ -11,6 +11,12 @@ namespace Kvh.Kaleidoscope
 {
     public static class GraphicsExtensions
     {
+        public static GraphicsPath ToGraphicsPath(this PointF[] points)
+        {
+            var graphicsPath = new GraphicsPath();
+            graphicsPath.AddPolygon(points);
+            return graphicsPath;
+        }
 
         /// <summary>
         /// Resize the image to the specified width and height.
@@ -153,6 +159,20 @@ namespace Kvh.Kaleidoscope
                     patternWidth * xOffsetFactors[i], 
                     patternHeight * yOffsetFactors[i], 
                     rotationAngles[i]);
+            }
+        }
+
+        public static void DrawSet(this Graphics g, Bitmap[] patterns,
+             float patternWidth, float patternHeight, 
+             TransformationSet transformations)
+        {
+            for (var i = 0; i < transformations.Length; i++)
+            {
+                g.DrawImageAtLoactionAndAngle(
+                    patterns[transformations.TemplateIndices[i]],
+                    patternWidth * transformations.XOffsetFactors[i],
+                    patternHeight * transformations.YOffsetFactors[i],
+                    transformations.Rotations[i]);
             }
         }
 

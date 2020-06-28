@@ -25,19 +25,18 @@ namespace Kvh.Kaleidoscope
             this.view.Model = this.model;
 
             //TODO
-            model.GraphicsInterpolationMode = InterpolationMode.HighQualityBicubic;
-            model.GraphicsPixelOffsetMode = PixelOffsetMode.HighQuality;
-            model.GraphicsSmoothingMode = SmoothingMode.AntiAlias;
-            SetKaleidoscope(new Kaleidoscope306090Triangle() {
-                InterpolationMode = model.GraphicsInterpolationMode,
-                PixelOffsetMode = model.GraphicsPixelOffsetMode,
-                SmoothingMode = model.GraphicsSmoothingMode,
-            } );
+            //model.GraphicsInterpolationMode = InterpolationMode.HighQualityBicubic;
+            //model.GraphicsPixelOffsetMode = PixelOffsetMode.HighQuality;
+            //model.GraphicsSmoothingMode = SmoothingMode.AntiAlias;
+            KaleidoscopeRenderer.SetGraphicsModes(SmoothingMode.AntiAlias,
+                PixelOffsetMode.HighQuality,
+                InterpolationMode.HighQualityBicubic);
+            SetMirorrSystem(new MirrorSystem606060());
         }
 
-        public void SetKaleidoscope(IKaleidoscope kaleidoscope)
+        public void SetMirorrSystem(MirrorSystem mirroSystem)
         {
-            model.Kaleidoscope = kaleidoscope;
+            model.MirrorSystem = mirroSystem;
         }
 
 
@@ -83,13 +82,13 @@ namespace Kvh.Kaleidoscope
         {
             // use a temp bitmap to avoid flickering
             var templateFinderBitmap = model.ScaledImage.Clone() as Bitmap;
-            var clippingPath = model.Kaleidoscope.GetUntransformedTemplateClippingPath(
-                model.TemplateExtractionSize);
+            var clippingPath = model.MirrorSystem.GetUntransformedTemplateClippingPolygon(
+                model.TemplateExtractionSize).ToGraphicsPath();
             var graphics = Graphics.FromImage(templateFinderBitmap);
             
-            graphics.SmoothingMode = model.GraphicsSmoothingMode;
-            graphics.PixelOffsetMode = model.GraphicsPixelOffsetMode;
-            graphics.InterpolationMode = model.GraphicsInterpolationMode;
+            graphics.SmoothingMode = KaleidoscopeRenderer.SmoothingMode;
+            graphics.PixelOffsetMode = KaleidoscopeRenderer.PixelOffsetMode;
+            graphics.InterpolationMode = KaleidoscopeRenderer.InterpolationMode;
 
             graphics.TranslateTransform(
                 model.TemplateExtractionOffsetX,
@@ -121,8 +120,9 @@ namespace Kvh.Kaleidoscope
 
         public void ExtractTemplate()
         {
-            model.Template = model.Kaleidoscope.ExtractTemplate(
+            model.Template = KaleidoscopeRenderer.ExtractTemplate(
                 model.ScaledImage,
+                model.MirrorSystem,
                 model.TemplateExtractionSize,
                 model.TemplateExtractionOffsetX,
                 model.TemplateExtractionOffsetY,
@@ -135,8 +135,8 @@ namespace Kvh.Kaleidoscope
         {
             model.RenderingWidth = renderingWidth;
             model.RenderingHeight = renderingHeight;
-            model.RectangularPattern = model.Kaleidoscope.
-                GetTileableRectangularPattern(model.Template);
+            model.RectangularPattern = KaleidoscopeRenderer.
+                GetTileableRectangularPattern(model.Template, model.MirrorSystem);
             model.RenderedImage = GraphicsExtensions.CentreAlignedTile(
                 model.RectangularPattern,
                 model.RenderingWidth,

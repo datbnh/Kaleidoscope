@@ -72,8 +72,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="FlipMode.cs" />
     <Compile Include="Helpers.cs" />
+    <Compile Include="IKaleidoscope.cs" />
+    <Compile Include="KaleidoscopeRenderer.cs" />
     <Compile Include="Kaleidoscope306090Triangle.cs" />
+    <Compile Include="MirrorSystem606060.cs" />
     <Compile Include="MVC_View.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -81,7 +85,7 @@
       <DependentUpon>MVC_View.cs</DependentUpon>
     </Compile>
     <Compile Include="GraphicsExtensions.cs" />
-    <Compile Include="IKaleidoscope.cs" />
+    <Compile Include="MirrorSystem.cs" />
     <Compile Include="KaleidoscopeEquilateralTriangle.cs" />
     <Compile Include="MVC_Controller.cs" />
     <Compile Include="MVC_Model.cs" />
@@ -93,6 +97,7 @@
     <Compile Include="RenderWindow.Designer.cs">
       <DependentUpon>RenderWindow.cs</DependentUpon>
     </Compile>
+    <Compile Include="TransformationSet.cs" />
     <EmbeddedResource Include="MVC_View.resx">
       <DependentUpon>MVC_View.cs</DependentUpon>
     </EmbeddedResource>
