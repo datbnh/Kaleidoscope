@@ -628,6 +628,8 @@ namespace Kvh.Kaleidoscope
                 Controller.SetMirorrSystem(typeof(MirrorSystem306090));
             else if (e.ClickedItem.Text.Contains("60-60-60"))
                 Controller.SetMirorrSystem(typeof(MirrorSystem606060));
+            else if (e.ClickedItem.Text.Contains("45-90-45"))
+                Controller.SetMirorrSystem(typeof(MirrorSystem459045));
             else
                 return;
 

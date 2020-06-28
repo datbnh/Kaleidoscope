@@ -165,6 +165,8 @@ namespace Kvh.Kaleidoscope
                 SetMirorrSystem(new MirrorSystem306090());
             else if (type.IsEquivalentTo(typeof(MirrorSystem606060)))
                 SetMirorrSystem(new MirrorSystem606060());
+            else if (type.IsEquivalentTo(typeof(MirrorSystem459045)))
+                SetMirorrSystem(new MirrorSystem459045());
             else
                 return;
             UpdateClippingPathOnTemplateFinder();
